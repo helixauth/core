@@ -1,0 +1,15 @@
+BEGIN;
+
+DROP TABLE IF EXISTS passwords;
+
+DROP TABLE IF EXISTS sessions;
+
+DROP TABLE IF EXISTS clients;
+
+DROP TABLE IF EXISTS users;
+
+DROP OWNED BY helix;
+
+DROP USER IF EXISTS helix;
+
+COMMIT;

@@ -1,0 +1,18 @@
+<html>
+  <header>
+    <link rel="stylesheet" href="/public/css/index.css" />
+    <script src="/public/js/authorization.js" defer></script>
+  </header>
+  <body>
+    <h1>{{ .title }}</h1>
+    <form id="sign-up-form">
+      <p>Email</p>
+      <input type="email" name="email" autocomplete="email" />
+      <p>Password</p>
+      <input type="password" name="password" />
+      <p>Confirm password</p>
+      <input type="password" name="confirm_password" />
+      <button type="submit">Continue</button>
+    </form>
+  </body>
+</html>

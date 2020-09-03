@@ -1,0 +1,27 @@
+version: "3.3"
+
+services:
+  # helix:
+  #   build: .
+  #   volumes:
+  #     - .:/go/src/github.com/helixauth/helix
+  #   env_file:
+  #     - cfg/dev.env
+  #   ports:
+  #     - "80:80"
+  #     - "2048:2048"
+
+  helixdb:
+    image: postgres
+    container_name: helixdb
+    environment:
+      POSTGRES_USER: sysadmin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: helixdb
+    volumes:
+      - helixdb:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
+volumes:
+  helixdb:
