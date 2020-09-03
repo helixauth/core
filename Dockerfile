@@ -12,6 +12,8 @@ RUN mkdir /go/src/github.com/helixauth/helix
 WORKDIR /go/src/github.com/helixauth/helix
 COPY . .
 
-RUN go build -o main ./src/main.go
+RUN go mod download
 
-CMD ["./main"]
+RUN go get github.com/githubnemo/CompileDaemon
+
+ENTRYPOINT CompileDaemon -log-prefix=false --build="go build ./src/main.go" --command=./main

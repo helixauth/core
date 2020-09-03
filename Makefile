@@ -23,22 +23,28 @@ mock:
 test:
 	go test -cover $(PKGS)
 
-# Bootstrap Helix locally. This only needs to be run once.
-bootstrap: db db/up run
-
-#############
-# Local tools
-#############
-
-# Run PostgreSQL locally
-db:
+# Start helix with hot-reloading
+start:
 	docker-compose up -d
 
-# Connect to the running PostgeSQL instance
+# Stop the local instance
+stop:
+	docker-compose down
+
+# Display the logs
+logs:
+	docker-compose logs -f
+
+# Starts Helix and migrates the database to the latest version
+bootstrap:
+	make start ; \
+	make db/up
+
+# Connect to the local PostgeSQL instance
 db/connect:
 	docker-compose run helixdb bash
 
-# Creates a set of new database migration files (up and down)
+# Generates a new set of database migration files (up and down)
 db/migration:
 	migrate create -ext sql -dir bin/migrate/sql -seq $(name)
 
@@ -51,8 +57,3 @@ db/up:
 db/down:
 	set -o allexport; source cfg/dev.env; set +o allexport ; \
 	go run bin/migrate/main.go down
-
-# Run a service locally
-run:
-	set -o allexport; source cfg/dev.env; set +o allexport ; \
-	go run src/main.go

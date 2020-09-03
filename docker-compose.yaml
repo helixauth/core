@@ -1,15 +1,15 @@
 version: "3.3"
 
 services:
-  # helix:
-  #   build: .
-  #   volumes:
-  #     - .:/go/src/github.com/helixauth/helix
-  #   env_file:
-  #     - cfg/dev.env
-  #   ports:
-  #     - "80:80"
-  #     - "2048:2048"
+  helix:
+    build: .
+    volumes:
+      - ./:/go/src/github.com/helixauth/helix
+    env_file:
+      - cfg/dev.env
+    ports:
+      - "80:80"
+      - "2048:2048"
 
   helixdb:
     image: postgres
