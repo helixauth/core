@@ -21,7 +21,7 @@ func Run(ctx context.Context, cfg config.Config, gateways gateway.Gateways) {
 	r.LoadHTMLGlob(html)
 	r.Static("/public", public)
 	r.GET("/", app.Index)
-	r.POST("/authenticate", app.Authenticate)
+	r.POST("/authentication", app.Authentication)
 	r.GET("/authorization", app.Authorization)
 	r.GET("/introspect", app.Introspect)
 	r.GET("/jwks", app.JWKs)
