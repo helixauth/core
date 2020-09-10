@@ -1,10 +1,7 @@
 package main
 
-// func main() {
-// 	panic("Not implemented")
-// }
-
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -39,8 +36,15 @@ func main() {
 	log.Println()
 
 	// Connect to the database
-	cfg := config.New()
-	connInfo := fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=%v", "sysadmin", string(password), cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.DBName, cfg.Postgres.SSLMode)
+	ctx := cfg.Configure(context.Background())
+	connInfo := fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=%v",
+		"sysadmin",
+		string(password),
+		ctx.Value(cfg.PostgresHost).(string),
+		ctx.Value(cfg.PostgresPort).(string),
+		ctx.Value(cfg.PostgresDBName).(string),
+		ctx.Value(cfg.PostgresSSLMode).(string),
+	)
 	m, err := migrate.New("file://bin/migrate/sql", connInfo)
 	if err != nil {
 		log.Fatal(err)
