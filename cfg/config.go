@@ -32,6 +32,7 @@ func New() Config {
 			DBName:   os.Getenv("POSTGRES_DB_NAME"),
 			SSLMode:  os.Getenv("POSTGRES_SSL_MODE"),
 		},
+		TenantID: os.Getenv("TENANT_ID"),
 	}
 }
 
@@ -40,6 +41,7 @@ type Config struct {
 	Gin      GinConfig
 	OAuth    OAuthConfig
 	Postgres PostgresConfig
+	TenantID string
 }
 
 type EmailConfig struct {

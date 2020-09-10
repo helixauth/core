@@ -2,6 +2,7 @@ BEGIN;
 
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
+  tenant_id TEXT NOT NULL,
   name TEXT DEFAULT NULL,
 	nickname TEXT DEFAULT NULL,
 	preferred_username TEXT DEFAULT NULL,
@@ -23,12 +24,17 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL,
   last_active_at TIMESTAMP DEFAULT NULL,
-  CONSTRAINT unique_email UNIQUE (email),
-  CONSTRAINT unique_phone_number UNIQUE (phone_number)
+  CONSTRAINT unique_email_per_tenant UNIQUE (email, tenant_id)
 );
+
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY users_tenant_isolation_policy ON users
+    USING (tenant_id = current_setting('app.tenant_id'));
 
 CREATE TABLE IF NOT EXISTS clients (
   id TEXT PRIMARY KEY,
+  tenant_id TEXT NOT NULL,
   name TEXT NOT NULL,
   secret TEXT NOT NULL,
   logo TEXT DEFAULT NULL,
@@ -39,8 +45,14 @@ CREATE TABLE IF NOT EXISTS clients (
   authorized_domains TEXT[]
 );
 
+ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY clients_tenant_isolation_policy ON clients
+    USING (tenant_id = current_setting('app.tenant_id'));
+
 CREATE TABLE IF NOT EXISTS sessions (
   id TEXT PRIMARY KEY,
+  tenant_id TEXT NOT NULL,
   user_id TEXT NOT NULL,
   client_id TEXT NOT NULL,
   response_type TEXT NOT NULL,
@@ -54,14 +66,24 @@ CREATE TABLE IF NOT EXISTS sessions (
   refreshed_at TIMESTAMP DEFAULT NULL
 );
 
+ALTER TABLE sessions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY sessions_tenant_isolation_policy ON sessions
+    USING (tenant_id = current_setting('app.tenant_id'));
+
 CREATE TABLE IF NOT EXISTS passwords (
   id TEXT PRIMARY KEY,
+  tenant_id TEXT NOT NULL,
   user_id TEXT NOT NULL REFERENCES users(id),
   hash TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL,
   retired_at TIMESTAMP DEFAULT NULL
 );
 
+ALTER TABLE passwords ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY passwords_tenant_isolation_policy ON passwords
+    USING (tenant_id = current_setting('app.tenant_id'));
 
 -- WARNING: Update this user's password after bootstrapping the server
 CREATE USER helix WITH ENCRYPTED PASSWORD 'password';
