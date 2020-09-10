@@ -8,6 +8,14 @@ import (
 	"strings"
 )
 
+type SQLWritable interface {
+	SQLTable() string
+}
+
+type SQLReadable interface {
+	FromSQL(*sql.Rows) error
+}
+
 func SQLParseRow(rows *sql.Rows, into interface{}) error {
 	v := reflect.ValueOf(into)
 	fields := make([]interface{}, v.Elem().NumField())
@@ -23,8 +31,8 @@ func SQLParseRow(rows *sql.Rows, into interface{}) error {
 	return nil
 }
 
-func SQLInsert(ctx context.Context, item interface{}, table string, tx *sql.Tx) error {
-	cmd := `INSERT INTO ` + table
+func SQLInsert(ctx context.Context, item SQLWritable, tx *sql.Tx) error {
+	cmd := `INSERT INTO ` + item.SQLTable()
 	fNames := []string{}
 	fPlaceholders := []string{}
 	fValues := []interface{}{}

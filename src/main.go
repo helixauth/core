@@ -56,7 +56,7 @@ func bootstrap(ctx context.Context, database database.Gateway) {
 	}
 
 	tenant.ID = tenantID
-	if err = utils.SQLInsert(ctx, tenant, "tenants", tx); err != nil {
+	if err = utils.SQLInsert(ctx, tenant, tx); err != nil {
 		tx.Rollback()
 		panic(err)
 	}

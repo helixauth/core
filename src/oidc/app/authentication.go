@@ -56,7 +56,7 @@ func (a *app) Authentication(c *gin.Context) {
 		CreatedAt:    time.Now().UTC(),
 	}
 
-	if err = utils.SQLInsert(ctx, session, "sessions", tx); err != nil {
+	if err = utils.SQLInsert(ctx, session, tx); err != nil {
 		tx.Rollback()
 		log.Fatal(err)
 	}
