@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS tenants (
   id                    TEXT PRIMARY KEY,
   name                  TEXT DEFAULT NULL,
   picture               TEXT DEFAULT NULL,
-  authorized_domains    TEXT[],
+  website               TEXT DEFAULT NULL,
   email                 TEXT DEFAULT NULL,
   email_provider        TEXT DEFAULT NULL,
   aws_region_id         TEXT DEFAULT NULL,

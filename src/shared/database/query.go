@@ -10,7 +10,6 @@ import (
 func (g *gateway) Query(ctx context.Context, into SQLParsable, qry string, args ...interface{}) error {
 	conn, err := g.db.Conn(ctx)
 	if err != nil {
-		conn.Close()
 		return err
 	}
 
