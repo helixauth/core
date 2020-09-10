@@ -1,9 +1,9 @@
-package api
+package app
 
 import (
 	"github.com/gin-gonic/gin"
 )
 
-func (a *api) UsersDelete(c *gin.Context) {
+func (a *app) Revoke(c *gin.Context) {
 	panic("Not implemented")
 }

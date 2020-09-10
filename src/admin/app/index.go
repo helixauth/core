@@ -1,4 +1,4 @@
-package api
+package app
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (a *api) Index(c *gin.Context) {
+func (a *app) Index(c *gin.Context) {
 	c.HTML(
 		http.StatusOK,
 		"index.html",

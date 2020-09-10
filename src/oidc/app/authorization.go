@@ -1,4 +1,4 @@
-package api
+package app
 
 import (
 	"net/http"
@@ -16,7 +16,7 @@ type authorizationRequest struct {
 	Prompt       *string `form:"prompt"`
 }
 
-func (a *api) Authorization(c *gin.Context) {
+func (a *app) Authorization(c *gin.Context) {
 	req := authorizationRequest{}
 	if err := c.BindQuery(&req); err != nil {
 		c.HTML(

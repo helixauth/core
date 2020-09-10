@@ -1,4 +1,4 @@
-package api
+package app
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (a *api) Configuration(c *gin.Context) {
+func (a *app) Configuration(c *gin.Context) {
 	var msg struct {
 		Issuer                            string   `json:"issuer"`
 		AuthorizationEndpoint             string   `json:"authorization_endpoint"`

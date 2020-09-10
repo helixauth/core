@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/helixauth/helix/cfg"
-	"github.com/helixauth/helix/src/app/admin"
-	"github.com/helixauth/helix/src/app/oidc"
+	"github.com/helixauth/helix/src/admin"
+	"github.com/helixauth/helix/src/oidc"
 	"github.com/helixauth/helix/src/shared/gateway"
 )
 
@@ -16,6 +16,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	go admin.New(ctx, cfg, gateways).Run(":2048")
-	oidc.New(ctx, cfg, gateways).Run(":80")
+
+	go admin.Run(ctx, cfg, gateways)
+	oidc.Run(ctx, cfg, gateways)
 }

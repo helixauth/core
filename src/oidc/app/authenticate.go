@@ -1,4 +1,4 @@
-package api
+package app
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (a *api) Authenticate(c *gin.Context) {
+func (a *app) Authenticate(c *gin.Context) {
 	ctx := c.Request.Context()
 	req := authorizationRequest{}
 	if err := c.BindQuery(&req); err != nil {

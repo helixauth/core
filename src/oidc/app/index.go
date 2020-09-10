@@ -1,4 +1,4 @@
-package api
+package app
 
 import (
 	"fmt"
@@ -7,6 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (a *api) Index(c *gin.Context) {
+func (a *app) Index(c *gin.Context) {
 	c.Redirect(http.StatusFound, fmt.Sprintf("/authorization%v", c.Request.URL.String()))
 }

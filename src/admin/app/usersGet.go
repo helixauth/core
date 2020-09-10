@@ -1,9 +1,9 @@
-package api
+package app
 
 import (
 	"github.com/gin-gonic/gin"
 )
 
-func (a *api) UserInfo(c *gin.Context) {
+func (a *app) UsersGet(c *gin.Context) {
 	panic("Not implemented")
 }

@@ -1,4 +1,4 @@
-package api
+package app
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type API interface {
+type App interface {
 	Authenticate(c *gin.Context)
 	Authorization(c *gin.Context)
 	Configuration(c *gin.Context)
@@ -21,13 +21,13 @@ type API interface {
 	UserInfo(c *gin.Context)
 }
 
-type api struct {
+type app struct {
 	Config   config.Config
 	Gateways gateway.Gateways
 }
 
-func New(ctx context.Context, cfg config.Config, gateways gateway.Gateways) API {
-	return &api{
+func New(ctx context.Context, cfg config.Config, gateways gateway.Gateways) App {
+	return &app{
 		Config:   cfg,
 		Gateways: gateways,
 	}

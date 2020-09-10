@@ -1,4 +1,4 @@
-package api
+package app
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type API interface {
+type App interface {
 	Index(c *gin.Context)
 
 	UsersDelete(c *gin.Context)
@@ -17,13 +17,13 @@ type API interface {
 	UsersList(c *gin.Context)
 }
 
-type api struct {
+type app struct {
 	Config   config.Config
 	Gateways gateway.Gateways
 }
 
-func New(ctx context.Context, cfg config.Config, gateways gateway.Gateways) API {
-	return &api{
+func New(ctx context.Context, cfg config.Config, gateways gateway.Gateways) App {
+	return &app{
 		Config:   cfg,
 		Gateways: gateways,
 	}
