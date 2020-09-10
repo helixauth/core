@@ -4,15 +4,14 @@ import (
 	"context"
 	"os"
 
-	"github.com/helixauth/helix/cfg"
 	"github.com/helixauth/helix/src/admin/app"
-	"github.com/helixauth/helix/src/shared/gateway"
+	"github.com/helixauth/helix/src/shared/database"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Run(ctx context.Context, cfg config.Config, gateways gateway.Gateways) {
-	app := app.New(ctx, cfg, gateways)
+func Run(ctx context.Context, database database.Gateway) {
+	app := app.New(ctx, database)
 	wd, _ := os.Getwd()
 	public := wd + "/src/admin/public"
 	html := public + "/html/*"

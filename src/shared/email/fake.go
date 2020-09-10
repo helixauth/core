@@ -3,13 +3,11 @@ package email
 import (
 	"context"
 	"log"
-
-	"github.com/helixauth/helix/cfg"
 )
 
 type fakeGateway struct{}
 
-func NewFakeGateway(cfg config.Config) (Gateway, error) {
+func NewFakeGateway(ctx context.Context) (Gateway, error) {
 	return &fakeGateway{}, nil
 }
 

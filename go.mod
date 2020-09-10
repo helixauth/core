@@ -8,6 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-delve/delve v1.5.0
 	github.com/golang-migrate/migrate/v4 v4.12.2
+	github.com/golangci/golangci-lint v1.31.0
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/handlers v1.5.0
 	github.com/gorilla/mux v1.8.0

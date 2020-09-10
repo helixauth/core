@@ -20,8 +20,15 @@ type gateway struct {
 	db *sql.DB
 }
 
-func New(cfg config.Config) (Gateway, error) {
-	connInfo := fmt.Sprintf("host=%v port=%v user=%v password=%v dbname=%v sslmode=%v", cfg.Postgres.Host, cfg.Postgres.Port, cfg.Postgres.Username, cfg.Postgres.Password, cfg.Postgres.DBName, cfg.Postgres.SSLMode)
+func New(ctx context.Context) (Gateway, error) {
+	connInfo := fmt.Sprintf("host=%v port=%v user=%v password=%v dbname=%v sslmode=%v",
+		ctx.Value(cfg.PostgresHost).(string),
+		ctx.Value(cfg.PostgresPort).(string),
+		ctx.Value(cfg.PostgresUsername).(string),
+		ctx.Value(cfg.PostgresPassword).(string),
+		ctx.Value(cfg.PostgresDBName).(string),
+		ctx.Value(cfg.PostgresSSLMode).(string),
+	)
 	db, err := sql.Open("postgres", connInfo)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to connect to database")

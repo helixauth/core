@@ -3,6 +3,8 @@ package database
 import (
 	"context"
 	"fmt"
+
+	"github.com/helixauth/helix/cfg"
 )
 
 func (g *gateway) Query(ctx context.Context, into SQLParsable, qry string, args ...interface{}) error {
@@ -12,7 +14,7 @@ func (g *gateway) Query(ctx context.Context, into SQLParsable, qry string, args 
 		return err
 	}
 
-	tenantID, _ := ctx.Value("TENANT_ID").(string)
+	tenantID := ctx.Value(cfg.TenantID).(string)
 	cmd := fmt.Sprintf("SET app.tenant_id = '%v';", tenantID)
 	if _, err = conn.ExecContext(ctx, cmd); err != nil {
 		conn.Close()

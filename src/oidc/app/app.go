@@ -4,7 +4,8 @@ import (
 	"context"
 
 	"github.com/helixauth/helix/cfg"
-	"github.com/helixauth/helix/src/shared/gateway"
+	"github.com/helixauth/helix/src/shared/database"
+	"github.com/helixauth/helix/src/shared/email"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,13 +23,21 @@ type App interface {
 }
 
 type app struct {
-	Config   config.Config
-	Gateways gateway.Gateways
+	TenantID string
+	Database database.Gateway
+	Email    email.Gateway
 }
 
-func New(ctx context.Context, cfg config.Config, gateways gateway.Gateways) App {
+func New(ctx context.Context, database database.Gateway, email email.Gateway) App {
 	return &app{
-		Config:   cfg,
-		Gateways: gateways,
+		TenantID: ctx.Value(cfg.TenantID).(string),
+		Database: database,
+		Email:    email,
 	}
+}
+
+func (a *app) context(c *gin.Context) context.Context {
+	ctx := c.Request.Context()
+	ctx = context.WithValue(ctx, cfg.TenantID, a.TenantID)
+	return ctx
 }

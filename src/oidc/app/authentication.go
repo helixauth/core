@@ -18,7 +18,7 @@ import (
 // - password
 
 func (a *app) Authentication(c *gin.Context) {
-	ctx := c.Request.Context()
+	ctx := a.context(c)
 	req := authorizationRequest{}
 	if err := c.BindQuery(&req); err != nil {
 		c.HTML(
@@ -37,7 +37,7 @@ func (a *app) Authentication(c *gin.Context) {
 
 	// TODO authenticate the email/password
 
-	tx, err := a.Gateways.Database.BeginTx(ctx)
+	tx, err := a.Database.BeginTx(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}

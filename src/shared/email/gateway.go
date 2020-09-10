@@ -2,8 +2,6 @@ package email
 
 import (
 	"context"
-
-	"github.com/helixauth/helix/cfg"
 )
 
 const (
@@ -14,9 +12,13 @@ type Gateway interface {
 	SendEmail(ctx context.Context, sender string, recipient string, subject string, htmlBody string) error
 }
 
-func New(cfg config.Config) (Gateway, error) {
-	if cfg.Email.SES != nil {
-		return NewSESGateway(cfg)
-	}
-	return NewFakeGateway(cfg)
+func New(ctx context.Context) (Gateway, error) {
+
+	// TODO load SES gateway
+
+	// if cfg.Email.SES != nil {
+	// 	return NewSESGateway(cfg)
+	// }
+
+	return NewFakeGateway(ctx)
 }
