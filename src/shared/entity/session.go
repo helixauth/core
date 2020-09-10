@@ -7,6 +7,7 @@ import (
 	"github.com/helixauth/helix/src/shared/utils"
 )
 
+// Session represents a particular OAuth/OIDC session
 type Session struct {
 	ID           string     `json:"id"`
 	TenantID     string     `json:"tenant_id"`
@@ -23,6 +24,7 @@ type Session struct {
 	RefreshedAt  *time.Time `json:"refreshed_at"`
 }
 
+// FromSQL parses a Session entity from a SQL row
 func (s *Session) FromSQL(rows *sql.Rows) error {
 	if !rows.Next() {
 		return nil

@@ -7,6 +7,7 @@ import (
 	"github.com/helixauth/helix/src/shared/utils"
 )
 
+// User represents an authenticated person
 type User struct {
 	ID                string            `json:"id"`
 	TenantID          string            `json:"tenant_id"`
@@ -33,6 +34,7 @@ type User struct {
 	LastActiveAt      *time.Time        `json:"last_active_at"`
 }
 
+// FromSQL parses a User entity from a SQL row
 func (u *User) FromSQL(rows *sql.Rows) error {
 	if !rows.Next() {
 		return nil
@@ -40,8 +42,10 @@ func (u *User) FromSQL(rows *sql.Rows) error {
 	return utils.SQLParseRow(rows, u)
 }
 
+// Users represents a slice of User entities
 type Users []*User
 
+// FromSQL parses a Users entity from a SQL row
 func (us *Users) FromSQL(rows *sql.Rows) error {
 	for rows.Next() {
 		u := &User{}
