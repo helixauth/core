@@ -13,7 +13,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (a *app) Authenticate(c *gin.Context) {
+// TODO authentication request
+// - email
+// - password
+
+func (a *app) Authentication(c *gin.Context) {
 	ctx := c.Request.Context()
 	req := authorizationRequest{}
 	if err := c.BindQuery(&req); err != nil {
@@ -25,8 +29,12 @@ func (a *app) Authenticate(c *gin.Context) {
 		return
 	}
 
-	// email := c.PostForm("email")
-	// password := c.PostForm("password")
+	// TODO validate the clientID
+	// TODO validate the response type
+	// TODO validate the scopes
+	// TODO validate the redirect URI is authorized
+	// TODO validate the prompt
+
 	// TODO authenticate the email/password
 
 	tx, err := a.Gateways.Database.BeginTx(ctx)
@@ -57,8 +65,6 @@ func (a *app) Authenticate(c *gin.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// TODO validate the redirect URI is an authorized domain
 
 	destination := req.RedirectURI + fmt.Sprintf("?code=%v&state=%v", code, session.State)
 	c.Redirect(http.StatusFound, destination)

@@ -10,7 +10,7 @@ import (
 )
 
 type App interface {
-	Authenticate(c *gin.Context)
+	Authentication(c *gin.Context)
 	Authorization(c *gin.Context)
 	Configuration(c *gin.Context)
 	Index(c *gin.Context)

@@ -7,6 +7,8 @@ import (
 	"github.com/helixauth/helix/src/shared/utils"
 )
 
+// TODO add TenantID
+
 type Session struct {
 	ID           string     `json:"id"`
 	UserID       string     `json:"user_id"`

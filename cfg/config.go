@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+// TODO add TenantID
+
 func New() Config {
 	return Config{
 		Email: EmailConfig{

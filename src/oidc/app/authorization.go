@@ -27,6 +27,12 @@ func (a *app) Authorization(c *gin.Context) {
 		return
 	}
 
+	// TODO validate the clientID
+	// TODO validate the response type
+	// TODO validate the scopes
+	// TODO validate the redirect URI is authorized
+	// TODO validate the prompt
+
 	if req.Prompt != nil && *req.Prompt == "create" {
 		c.HTML(
 			http.StatusOK,
