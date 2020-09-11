@@ -85,8 +85,8 @@ CREATE POLICY users_tenant_isolation_policy ON users
 CREATE TABLE IF NOT EXISTS sessions (
   id            TEXT PRIMARY KEY,
   tenant_id     TEXT NOT NULL REFERENCES tenants(id),
-  user_id       TEXT NOT NULL REFERENCES users(id),
   client_id     TEXT NOT NULL REFERENCES clients(id),
+  user_id       TEXT DEFAULT NULL REFERENCES users(id),
   response_type TEXT NOT NULL,
   scope         TEXT NOT NULL,
   state         TEXT NOT NULL,
