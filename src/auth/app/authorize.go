@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type authorizeRequest struct {
+type oauthRequest struct {
 	ClientID     string  `form:"client_id" binding:"required"`
 	ResponseType string  `form:"response_type" binding:"required"`
 	Scope        string  `form:"scope" binding:"required"`
@@ -17,7 +17,7 @@ type authorizeRequest struct {
 }
 
 func (a *app) Authorize(c *gin.Context) {
-	req := authorizeRequest{}
+	req := oauthRequest{}
 	if err := c.BindQuery(&req); err != nil {
 		c.HTML(
 			http.StatusBadRequest,
@@ -38,8 +38,9 @@ func (a *app) Authorize(c *gin.Context) {
 			http.StatusOK,
 			"signUp.html",
 			gin.H{
-				"title": "Sign up",
-				"query": c.Request.URL.RawQuery,
+				"title":  "Sign up",
+				"query":  c.Request.URL.RawQuery,
+				"action": "/authenticate?" + c.Request.URL.RawQuery,
 			},
 		)
 		return
@@ -49,8 +50,9 @@ func (a *app) Authorize(c *gin.Context) {
 		http.StatusOK,
 		"signIn.html",
 		gin.H{
-			"title": "Sign in",
-			"query": c.Request.URL.RawQuery,
+			"title":  "Sign in",
+			"query":  c.Request.URL.RawQuery,
+			"action": "/authenticate?" + c.Request.URL.RawQuery,
 		},
 	)
 }

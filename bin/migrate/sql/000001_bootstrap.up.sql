@@ -70,7 +70,6 @@ CREATE TABLE IF NOT EXISTS users (
 	birthdate          TEXT DEFAULT NULL,
   password_hash      TEXT DEFAULT NULL,
 	is_blocked         BOOLEAN DEFAULT false,
-  metadata           JSON NOT NULL,
   created_at         TIMESTAMP NOT NULL,
   updated_at         TIMESTAMP NOT NULL,
   last_active_at     TIMESTAMP DEFAULT NULL,
