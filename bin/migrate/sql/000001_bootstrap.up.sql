@@ -17,6 +17,38 @@ ALTER TABLE tenants ENABLE ROW LEVEL SECURITY;
 CREATE POLICY tenant_isolation_policy ON tenants
     USING (id = current_setting('app.tenant_id'));
 
+CREATE TABLE IF NOT EXISTS admins (
+  id         TEXT PRIMARY KEY,
+  tenant_id  TEXT NOT NULL REFERENCES tenants(id),
+  email      TEXT NOT NULL,
+  password   TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL
+);
+
+ALTER TABLE admins ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY admins_tenant_isolation_policy ON admins
+    USING (tenant_id = current_setting('app.tenant_id'));
+
+CREATE TABLE IF NOT EXISTS clients (
+  id                 TEXT PRIMARY KEY,
+  tenant_id          TEXT NOT NULL REFERENCES tenants(id),
+  name               TEXT DEFAULT NULL,
+  secret             TEXT DEFAULT NULL,
+  picture            TEXT DEFAULT NULL,
+  website            TEXT DEFAULT NULL,
+  description        TEXT DEFAULT NULL,
+  privacy_policy     TEXT DEFAULT NULL,
+  is_third_party     BOOLEAN DEFAULT true,
+  authorized_domains TEXT[]
+);
+
+ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY clients_tenant_isolation_policy ON clients
+    USING (tenant_id = current_setting('app.tenant_id'));
+
 CREATE TABLE IF NOT EXISTS users (
   id                 TEXT PRIMARY KEY,
   tenant_id          TEXT NOT NULL REFERENCES tenants(id),
@@ -36,6 +68,7 @@ CREATE TABLE IF NOT EXISTS users (
 	website            TEXT DEFAULT NULL,
 	gender             TEXT DEFAULT NULL,
 	birthdate          TEXT DEFAULT NULL,
+  password_hash      TEXT DEFAULT NULL,
 	is_blocked         BOOLEAN DEFAULT false,
   metadata           JSON NOT NULL,
   created_at         TIMESTAMP NOT NULL,
@@ -47,24 +80,6 @@ CREATE TABLE IF NOT EXISTS users (
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY users_tenant_isolation_policy ON users
-    USING (tenant_id = current_setting('app.tenant_id'));
-
-CREATE TABLE IF NOT EXISTS clients (
-  id                 TEXT PRIMARY KEY,
-  tenant_id          TEXT NOT NULL REFERENCES tenants(id),
-  name               TEXT DEFAULT NULL,
-  secret             TEXT DEFAULT NULL,
-  picture            TEXT DEFAULT NULL,
-  website            TEXT DEFAULT NULL,
-  description        TEXT DEFAULT NULL,
-  privacy_policy     TEXT DEFAULT NULL,
-  is_third_party     BOOLEAN DEFAULT true,
-  authorized_domains TEXT[]
-);
-
-ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY clients_tenant_isolation_policy ON clients
     USING (tenant_id = current_setting('app.tenant_id'));
 
 CREATE TABLE IF NOT EXISTS sessions (
@@ -88,18 +103,18 @@ ALTER TABLE sessions ENABLE ROW LEVEL SECURITY;
 CREATE POLICY sessions_tenant_isolation_policy ON sessions
     USING (tenant_id = current_setting('app.tenant_id'));
 
-CREATE TABLE IF NOT EXISTS passwords (
+CREATE TABLE IF NOT EXISTS email_verifications (
   id         TEXT PRIMARY KEY,
   tenant_id  TEXT NOT NULL REFERENCES tenants(id),
   user_id    TEXT NOT NULL REFERENCES users(id),
-  hash       TEXT NOT NULL,
+  code_hash  TEXT NOT NULL, 
   created_at TIMESTAMP NOT NULL,
-  retired_at TIMESTAMP DEFAULT NULL
+  expires_at TIMESTAMP NOT NULL
 );
 
-ALTER TABLE passwords ENABLE ROW LEVEL SECURITY;
+ALTER TABLE email_verifications ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY passwords_tenant_isolation_policy ON passwords
+CREATE POLICY email_verifications_tenant_isolation_policy ON email_verifications
     USING (tenant_id = current_setting('app.tenant_id'));
 
 -- WARNING: Update this user's password after bootstrapping the server

@@ -27,6 +27,7 @@ type User struct {
 	Website           *string           `json:"website"`
 	Gender            *string           `json:"gender"`
 	Birthdate         *string           `json:"birthdate"`
+	PasswordHash      *string           `json:"password_hash"`
 	IsBlocked         bool              `json:"is_blocked"`
 	Metadata          map[string]string `json:"metadata"`
 	CreatedAt         time.Time         `json:"created_at"`

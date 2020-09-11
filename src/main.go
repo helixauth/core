@@ -63,7 +63,7 @@ func loadTenant(ctx context.Context, database database.Gateway) {
 		panic(err)
 	}
 
-	// Create first-party client
+	// Create client
 	client := &entity.Client{
 		ID:                uniuri.NewLen(32),
 		TenantID:          tenantID,
