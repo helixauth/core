@@ -16,7 +16,7 @@ import (
 func main() {
 	ctx := cfg.Configure(context.Background())
 
-	// Build dependencies
+	// Connect to the database
 	database, err := database.New(ctx)
 	if err != nil {
 		panic(err)
@@ -37,11 +37,12 @@ func main() {
 }
 
 func bootstrap(ctx context.Context, database database.Gateway) {
+
+	// Check for an existing tenant
 	tenantID, ok := ctx.Value(cfg.TenantID).(string)
 	if !ok || tenantID == "" {
 		panic("TENANT_ID not set")
 	}
-
 	log.Printf("🏠 Running as tenant: '%v'", tenantID)
 	tenant := &entity.Tenant{}
 	if err := database.Query(ctx, tenant, `SELECT * FROM tenants WHERE id = $1`, tenantID); err != nil {
@@ -50,17 +51,16 @@ func bootstrap(ctx context.Context, database database.Gateway) {
 		return
 	}
 
+	// Create a new tenant
 	tx, err := database.BeginTx(ctx)
 	if err != nil {
 		panic(err)
 	}
-
 	tenant.ID = tenantID
 	if err = utils.SQLInsert(ctx, tenant, "tenants", tx); err != nil {
 		tx.Rollback()
 		panic(err)
 	}
-
 	if err = tx.Commit(); err != nil {
 		panic(err)
 	}
