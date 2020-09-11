@@ -2,20 +2,27 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 	"reflect"
 )
+
+func parseRow(row *sql.Row, item interface{}) error {
+
+	// Validate 'item' is a pointer to a struct
+	vItem, err := isStructPtr(item)
+	if err != nil {
+		return err
+	}
+
+	// Scan the SQL row into the item
+	return scan(row, vItem)
+}
 
 func parseRows(rows *sql.Rows, list interface{}) error {
 
 	// Validate 'list' is a pointer to a slice
-	vListPtr := reflect.ValueOf(list)
-	if vListPtr.Kind() != reflect.Ptr {
-		return fmt.Errorf("'list' must be a pointer to a slice")
-	}
-	vList := vListPtr.Elem()
-	if vList.Kind() != reflect.Slice {
-		return fmt.Errorf("'list' must be a pointer to a slice")
+	vList, err := isSlicePtr(list)
+	if err != nil {
+		return err
 	}
 
 	// Get the item type of the slice
@@ -37,22 +44,6 @@ func parseRows(rows *sql.Rows, list interface{}) error {
 	}
 
 	return nil
-}
-
-func parseRow(row *sql.Row, item interface{}) error {
-
-	// Validate 'item' is a pointer to a struct
-	vItemPtr := reflect.ValueOf(item)
-	if vItemPtr.Kind() != reflect.Ptr {
-		return fmt.Errorf("'item' must be a pointer to a struct")
-	}
-	vItem := vItemPtr.Elem()
-	if vItem.Kind() != reflect.Struct {
-		return fmt.Errorf("'item' must be a pointer to a struct")
-	}
-
-	// Scan the SQL row into the item
-	return scan(row, vItem)
 }
 
 type scannable interface {

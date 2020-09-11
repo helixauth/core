@@ -13,6 +13,7 @@ import (
 	"github.com/helixauth/helix/src/shared/entity"
 
 	"github.com/dchest/uniuri"
+	_ "github.com/lib/pq"
 )
 
 func main() {

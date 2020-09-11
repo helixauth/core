@@ -7,10 +7,10 @@ import (
 
 	"github.com/helixauth/helix/cfg"
 
-	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 )
 
+// Gateway provides an interface to the PostgreSQL database
 type Gateway interface {
 	BeginTxn(ctx context.Context) (Txn, error)
 	QueryItem(ctx context.Context, item interface{}, qry string, args ...interface{}) error
@@ -21,6 +21,7 @@ type gateway struct {
 	db *sql.DB
 }
 
+// New creates a new database gateway
 func New(ctx context.Context) (Gateway, error) {
 	connInfo := fmt.Sprintf("host=%v port=%v user=%v password=%v dbname=%v sslmode=%v",
 		ctx.Value(cfg.PostgresHost).(string),
