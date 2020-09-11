@@ -13,7 +13,7 @@ import (
 )
 
 type Gateway interface {
-	BeginTx(ctx context.Context) (*sql.Tx, error)
+	Txn(ctx context.Context) (Txn, error)
 	Query(ctx context.Context, into utils.SQLReadable, qry string, args ...interface{}) error
 }
 

@@ -10,7 +10,6 @@ import (
 	"github.com/helixauth/helix/src/shared/database"
 	"github.com/helixauth/helix/src/shared/email"
 	"github.com/helixauth/helix/src/shared/entity"
-	"github.com/helixauth/helix/src/shared/utils"
 )
 
 func main() {
@@ -50,18 +49,18 @@ func bootstrap(ctx context.Context, database database.Gateway) {
 		return
 	}
 
-	tx, err := database.BeginTx(ctx)
+	txn, err := database.Txn(ctx)
 	if err != nil {
 		panic(err)
 	}
 
 	tenant.ID = tenantID
-	if err = utils.SQLInsert(ctx, tenant, tx); err != nil {
-		tx.Rollback()
+	if err = txn.Insert(ctx, tenant); err != nil {
+		txn.Rollback()
 		panic(err)
 	}
 
-	if err = tx.Commit(); err != nil {
+	if err = txn.Commit(); err != nil {
 		panic(err)
 	}
 }

@@ -37,7 +37,7 @@ func (a *app) Authentication(c *gin.Context) {
 
 	// TODO authenticate the email/password
 
-	tx, err := a.Database.BeginTx(ctx)
+	txn, err := a.Database.Txn(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,12 +56,12 @@ func (a *app) Authentication(c *gin.Context) {
 		CreatedAt:    time.Now().UTC(),
 	}
 
-	if err = utils.SQLInsert(ctx, session, tx); err != nil {
-		tx.Rollback()
+	if err = txn.Insert(ctx, session); err != nil {
+		txn.Rollback()
 		log.Fatal(err)
 	}
 
-	err = tx.Commit()
+	err = txn.Commit()
 	if err != nil {
 		log.Fatal(err)
 	}
