@@ -7,31 +7,15 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/helixauth/helix/cfg"
-	"github.com/helixauth/helix/src/shared/utils"
-
 	"github.com/lib/pq"
 )
 
-func (g *gateway) Txn(ctx context.Context) (Txn, error) {
-	tx, err := g.db.BeginTx(ctx, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	tenantID := ctx.Value(cfg.TenantID).(string)
-	cmd := fmt.Sprintf("SET app.tenant_id = '%v';", tenantID)
-	if _, err := tx.ExecContext(ctx, cmd); err != nil {
-		return nil, err
-	}
-
-	return &txn{
-		tx: tx,
-	}, nil
+type Writable interface {
+	DatabaseTable() string
 }
 
 type Txn interface {
-	Insert(ctx context.Context, item utils.SQLWritable) error
+	Insert(ctx context.Context, item Writable) error
 	Rollback() error
 	Commit() error
 }
@@ -40,8 +24,8 @@ type txn struct {
 	tx *sql.Tx
 }
 
-func (txn *txn) Insert(ctx context.Context, item utils.SQLWritable) error {
-	cmd := `INSERT INTO ` + item.SQLTable()
+func (txn *txn) Insert(ctx context.Context, item Writable) error {
+	cmd := `INSERT INTO ` + item.DatabaseTable()
 	fNames := []string{}
 	fPlaceholders := []string{}
 	fValues := []interface{}{}

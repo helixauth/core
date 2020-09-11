@@ -1,11 +1,5 @@
 package entity
 
-import (
-	"database/sql"
-
-	"github.com/helixauth/helix/src/shared/utils"
-)
-
 // Client represents an application that has delegated auth responsibilities to a tenant
 type Client struct {
 	ID                string   `json:"id"`
@@ -20,30 +14,7 @@ type Client struct {
 	AuthorizedDomains []string `json:"authorized_domains"`
 }
 
-// FromSQL parses a Client entity from a SQL row
-func (c *Client) FromSQL(rows *sql.Rows) error {
-	if !rows.Next() {
-		return nil
-	}
-	return utils.SQLParseRow(rows, c)
-}
-
-// SQLTable points to the "clients" table
-func (c *Client) SQLTable() string {
+// DatabaseTable points to the "clients" table
+func (c *Client) DatabaseTable() string {
 	return "clients"
-}
-
-// Clients represents a slice of Client entities
-type Clients []*Client
-
-// FromSQL parses a Clients entity from a SQL row
-func (cs *Clients) FromSQL(rows *sql.Rows) error {
-	for rows.Next() {
-		c := &Client{}
-		if err := utils.SQLParseRow(rows, c); err != nil {
-			return err
-		}
-		*cs = append(*cs, c)
-	}
-	return nil
 }

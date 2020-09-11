@@ -5,10 +5,9 @@ import (
 	"fmt"
 
 	"github.com/helixauth/helix/cfg"
-	"github.com/helixauth/helix/src/shared/utils"
 )
 
-func (g *gateway) Query(ctx context.Context, into utils.SQLReadable, qry string, args ...interface{}) error {
+func (g *gateway) QueryList(ctx context.Context, list interface{}, qry string, args ...interface{}) error {
 	conn, err := g.db.Conn(ctx)
 	if err != nil {
 		return err
@@ -25,7 +24,6 @@ func (g *gateway) Query(ctx context.Context, into utils.SQLReadable, qry string,
 	if err != nil {
 		return err
 	}
-
 	defer rows.Close()
-	return into.FromSQL(rows)
+	return parseRows(rows, list)
 }

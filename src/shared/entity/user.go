@@ -1,10 +1,7 @@
 package entity
 
 import (
-	"database/sql"
 	"time"
-
-	"github.com/helixauth/helix/src/shared/utils"
 )
 
 // User represents a person using a client application
@@ -35,30 +32,7 @@ type User struct {
 	LastActiveAt      *time.Time        `json:"last_active_at"`
 }
 
-// FromSQL parses a User entity from a SQL row
-func (u *User) FromSQL(rows *sql.Rows) error {
-	if !rows.Next() {
-		return nil
-	}
-	return utils.SQLParseRow(rows, u)
-}
-
-// SQLTable points to the "users" table
-func (u *User) SQLTable() string {
+// DatabaseTable points to the "users" table
+func (u *User) DatabaseTable() string {
 	return "users"
-}
-
-// Users represents a slice of User entities
-type Users []*User
-
-// FromSQL parses a Users entity from a SQL row
-func (us *Users) FromSQL(rows *sql.Rows) error {
-	for rows.Next() {
-		u := &User{}
-		if err := utils.SQLParseRow(rows, u); err != nil {
-			return err
-		}
-		*us = append(*us, u)
-	}
-	return nil
 }

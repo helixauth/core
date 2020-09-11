@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"database/sql"
 	"log"
 
 	"github.com/helixauth/helix/cfg"
@@ -47,14 +48,15 @@ func loadTenant(ctx context.Context, database database.Gateway) {
 	// Check if tenant already exists
 	log.Printf("🏠 Running as tenant: '%v'", tenantID)
 	tenant := &entity.Tenant{}
-	if err := database.Query(ctx, tenant, `SELECT * FROM tenants WHERE id = $1`, tenantID); err != nil {
-		panic(err)
-	} else if (*tenant != entity.Tenant{}) {
+	err := database.QueryItem(ctx, tenant, `SELECT * FROM tenants WHERE id = $1`, tenantID)
+	if err == nil {
 		return
+	} else if err != sql.ErrNoRows {
+		panic(err)
 	}
 
 	// Create tenant
-	txn, err := database.Txn(ctx)
+	txn, err := database.BeginTxn(ctx)
 	if err != nil {
 		panic(err)
 	}

@@ -1,15 +1,18 @@
 <html>
   <header>
     <link rel="stylesheet" href="/public/css/index.css" />
+    <script>
+      const QUERY = "{{ .query }}"
+    </script>
     <script src="/public/js/authorization.js" defer></script>
   </header>
   <body>
     <h1>{{ .title }}</h1>
-    <form id="sign-in-form">
+    <form onsubmit="signIn(event)">
       <p>Email</p>
-      <input type="email" name="email" autocomplete="email" />
+      <input id="email" type="email" name="email" autocomplete="email" />
       <p>Password</p>
-      <input type="password" name="password" autocomplete="current-password" />
+      <input id="password" type="password" name="password" autocomplete="current-password" />
       <button type="submit">Continue</button>
     </form>
   </body>

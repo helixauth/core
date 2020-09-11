@@ -8,5 +8,5 @@ import (
 )
 
 func (a *app) Index(c *gin.Context) {
-	c.Redirect(http.StatusFound, fmt.Sprintf("/authorization%v", c.Request.URL.String()))
+	c.Redirect(http.StatusFound, fmt.Sprintf("/authorize%v", c.Request.URL.String()))
 }

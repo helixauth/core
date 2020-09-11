@@ -1,10 +1,7 @@
 package entity
 
 import (
-	"database/sql"
 	"time"
-
-	"github.com/helixauth/helix/src/shared/utils"
 )
 
 // Session represents a particular OAuth/OIDC session
@@ -24,15 +21,7 @@ type Session struct {
 	RefreshedAt  *time.Time `json:"refreshed_at"`
 }
 
-// FromSQL parses a Session entity from a SQL row
-func (s *Session) FromSQL(rows *sql.Rows) error {
-	if !rows.Next() {
-		return nil
-	}
-	return utils.SQLParseRow(rows, s)
-}
-
-// SQLTable points to the "sessions" table
-func (s *Session) SQLTable() string {
+// DatabaseTable points to the "sessions" table
+func (s *Session) DatabaseTable() string {
 	return "sessions"
 }

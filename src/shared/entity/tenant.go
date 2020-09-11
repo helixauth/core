@@ -1,11 +1,5 @@
 package entity
 
-import (
-	"database/sql"
-
-	"github.com/helixauth/helix/src/shared/utils"
-)
-
 // Tenant represents an application which can issue user identities
 type Tenant struct {
 	ID                 string  `json:"id"`
@@ -19,15 +13,7 @@ type Tenant struct {
 	AWSSecretAccessKey *string `json:"aws_secret_access_key"`
 }
 
-// FromSQL parses a Tenant entity from a SQL row
-func (t *Tenant) FromSQL(rows *sql.Rows) error {
-	if !rows.Next() {
-		return nil
-	}
-	return utils.SQLParseRow(rows, t)
-}
-
-// SQLTable points to the "tenants" table
-func (t *Tenant) SQLTable() string {
+// DatabaseTable points to the "tenants" table
+func (t *Tenant) DatabaseTable() string {
 	return "tenants"
 }

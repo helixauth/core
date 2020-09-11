@@ -37,7 +37,10 @@ func (a *app) Authorize(c *gin.Context) {
 		c.HTML(
 			http.StatusOK,
 			"signUp.html",
-			gin.H{"title": "Sign up"},
+			gin.H{
+				"title": "Sign up",
+				"query": c.Request.URL.RawQuery,
+			},
 		)
 		return
 	}
@@ -45,6 +48,9 @@ func (a *app) Authorize(c *gin.Context) {
 	c.HTML(
 		http.StatusOK,
 		"signIn.html",
-		gin.H{"title": "Sign in"},
+		gin.H{
+			"title": "Sign in",
+			"query": c.Request.URL.RawQuery,
+		},
 	)
 }
