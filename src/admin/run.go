@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Run starts the admin application
 func Run(ctx context.Context, database database.Gateway) {
 	app := app.New(ctx, database)
 	wd, _ := os.Getwd()

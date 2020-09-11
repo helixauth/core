@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Run starts the auth application (OAuth2/OIDC server)
 func Run(ctx context.Context, database database.Gateway, email email.Gateway) {
 	app := app.New(ctx, database, email)
 	wd, _ := os.Getwd()

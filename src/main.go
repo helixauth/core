@@ -40,6 +40,7 @@ func main() {
 }
 
 func loadTenant(ctx context.Context, database database.Gateway) {
+
 	// Get tenant ID
 	tenantID, ok := ctx.Value(cfg.TenantID).(string)
 	if !ok || tenantID == "" {
