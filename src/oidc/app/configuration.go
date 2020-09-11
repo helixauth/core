@@ -29,7 +29,7 @@ func (a *app) Configuration(c *gin.Context) {
 	}
 	scheme := utils.GetScheme(c)
 	baseURL := fmt.Sprintf("%v://%v", scheme, c.Request.Host)
-	msg.AuthorizationEndpoint = baseURL + "/authorization"
+	msg.AuthorizationEndpoint = baseURL + "/authorize"
 	msg.TokenEndpoint = baseURL + "/token"
 	msg.UserInfoEndpoint = baseURL + "/userinfo"
 	msg.JWKsURI = baseURL + "/jwks"

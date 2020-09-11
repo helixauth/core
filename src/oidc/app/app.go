@@ -11,8 +11,8 @@ import (
 )
 
 type App interface {
-	Authentication(c *gin.Context)
-	Authorization(c *gin.Context)
+	Authenticate(c *gin.Context)
+	Authorize(c *gin.Context)
 	Configuration(c *gin.Context)
 	Index(c *gin.Context)
 	Introspect(c *gin.Context)

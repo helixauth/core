@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type authorizationRequest struct {
+type authorizeRequest struct {
 	ClientID     string  `form:"client_id" binding:"required"`
 	ResponseType string  `form:"response_type" binding:"required"`
 	Scope        string  `form:"scope" binding:"required"`
@@ -16,8 +16,8 @@ type authorizationRequest struct {
 	Prompt       *string `form:"prompt"`
 }
 
-func (a *app) Authorization(c *gin.Context) {
-	req := authorizationRequest{}
+func (a *app) Authorize(c *gin.Context) {
+	req := authorizeRequest{}
 	if err := c.BindQuery(&req); err != nil {
 		c.HTML(
 			http.StatusBadRequest,

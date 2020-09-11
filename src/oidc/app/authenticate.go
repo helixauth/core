@@ -17,9 +17,9 @@ import (
 // - email
 // - password
 
-func (a *app) Authentication(c *gin.Context) {
+func (a *app) Authenticate(c *gin.Context) {
 	ctx := a.context(c)
-	req := authorizationRequest{}
+	req := authorizeRequest{}
 	if err := c.BindQuery(&req); err != nil {
 		c.HTML(
 			http.StatusBadRequest,
@@ -42,10 +42,11 @@ func (a *app) Authentication(c *gin.Context) {
 		log.Fatal(err)
 	}
 
+	userID := "foo"
 	code := uniuri.NewLen(uniuri.UUIDLen * 2)
 	session := &entity.Session{
 		ID:           utils.Hash(code),
-		UserID:       "foo",
+		UserID:       &userID,
 		ClientID:     req.ClientID,
 		ResponseType: req.ResponseType,
 		Scope:        req.Scope,
