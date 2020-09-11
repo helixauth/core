@@ -32,3 +32,18 @@ func (c *Client) FromSQL(rows *sql.Rows) error {
 func (c *Client) SQLTable() string {
 	return "clients"
 }
+
+// Clients represents a slice of Client entities
+type Clients []*Client
+
+// FromSQL parses a Clients entity from a SQL row
+func (cs *Clients) FromSQL(rows *sql.Rows) error {
+	for rows.Next() {
+		c := &Client{}
+		if err := utils.SQLParseRow(rows, c); err != nil {
+			return err
+		}
+		*cs = append(*cs, c)
+	}
+	return nil
+}

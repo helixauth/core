@@ -43,6 +43,11 @@ func (u *User) FromSQL(rows *sql.Rows) error {
 	return utils.SQLParseRow(rows, u)
 }
 
+// SQLTable points to the "users" table
+func (u *User) SQLTable() string {
+	return "users"
+}
+
 // Users represents a slice of User entities
 type Users []*User
 
@@ -56,9 +61,4 @@ func (us *Users) FromSQL(rows *sql.Rows) error {
 		*us = append(*us, u)
 	}
 	return nil
-}
-
-// SQLTable points to the "users" table
-func (u *User) SQLTable() string {
-	return "users"
 }
