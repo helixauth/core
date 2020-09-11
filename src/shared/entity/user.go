@@ -7,7 +7,7 @@ import (
 	"github.com/helixauth/helix/src/shared/utils"
 )
 
-// User represents an authenticated person
+// User represents a person using a client application
 type User struct {
 	ID                string            `json:"id"`
 	TenantID          string            `json:"tenant_id"`
@@ -58,6 +58,7 @@ func (us *Users) FromSQL(rows *sql.Rows) error {
 	return nil
 }
 
+// SQLTable points to the "users" table
 func (u *User) SQLTable() string {
 	return "users"
 }

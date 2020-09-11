@@ -6,6 +6,7 @@ import (
 	"github.com/helixauth/helix/src/shared/utils"
 )
 
+// Tenant represents an application which can issue user identities
 type Tenant struct {
 	ID                 string  `json:"id"`
 	Name               *string `json:"name"`
@@ -26,6 +27,7 @@ func (t *Tenant) FromSQL(rows *sql.Rows) error {
 	return utils.SQLParseRow(rows, t)
 }
 
+// SQLTable points to the "tenants" table
 func (t *Tenant) SQLTable() string {
 	return "tenants"
 }

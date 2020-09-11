@@ -6,6 +6,7 @@ import (
 	"github.com/helixauth/helix/src/shared/utils"
 )
 
+// Client represents an application that has delegated auth responsibilities to a tenant
 type Client struct {
 	ID                string   `json:"id"`
 	TenantID          string   `json:"tenant_id"`
@@ -27,6 +28,7 @@ func (c *Client) FromSQL(rows *sql.Rows) error {
 	return utils.SQLParseRow(rows, c)
 }
 
+// SQLTable points to the "clients" table
 func (c *Client) SQLTable() string {
 	return "clients"
 }

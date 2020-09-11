@@ -32,6 +32,7 @@ func (s *Session) FromSQL(rows *sql.Rows) error {
 	return utils.SQLParseRow(rows, s)
 }
 
+// SQLTable points to the "sessions" table
 func (s *Session) SQLTable() string {
 	return "sessions"
 }
