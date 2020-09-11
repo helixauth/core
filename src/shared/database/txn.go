@@ -56,7 +56,6 @@ func (txn *txn) Insert(ctx context.Context, item utils.SQLWritable) error {
 	cmd += fmt.Sprintf(" VALUES (%v)", strings.Join(fPlaceholders, ", "))
 	_, err := txn.tx.ExecContext(ctx, cmd, fValues...)
 	return err
-
 }
 
 func (txn *txn) Rollback() error {

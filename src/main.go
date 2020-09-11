@@ -21,8 +21,8 @@ func main() {
 		panic(err)
 	}
 
-	// Bootstrap the tenant
-	bootstrap(ctx, database)
+	// Load the tenant
+	loadTenant(ctx, database)
 
 	// TODO make this dynamic
 	email, err := email.New(ctx)
@@ -35,12 +35,14 @@ func main() {
 	oidc.Run(ctx, database, email)
 }
 
-func bootstrap(ctx context.Context, database database.Gateway) {
+func loadTenant(ctx context.Context, database database.Gateway) {
+	// Get tenant ID
 	tenantID, ok := ctx.Value(cfg.TenantID).(string)
 	if !ok || tenantID == "" {
 		panic("TENANT_ID not set")
 	}
 
+	// Check if tenant already exists
 	log.Printf("🏠 Running as tenant: '%v'", tenantID)
 	tenant := &entity.Tenant{}
 	if err := database.Query(ctx, tenant, `SELECT * FROM tenants WHERE id = $1`, tenantID); err != nil {
@@ -49,17 +51,16 @@ func bootstrap(ctx context.Context, database database.Gateway) {
 		return
 	}
 
+	// Create tenant
 	txn, err := database.Txn(ctx)
 	if err != nil {
 		panic(err)
 	}
-
 	tenant.ID = tenantID
 	if err = txn.Insert(ctx, tenant); err != nil {
 		txn.Rollback()
 		panic(err)
 	}
-
 	if err = txn.Commit(); err != nil {
 		panic(err)
 	}
