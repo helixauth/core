@@ -6,14 +6,15 @@ import (
 	"fmt"
 
 	"github.com/helixauth/helix/cfg"
+	"github.com/helixauth/helix/src/shared/utils"
 
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 )
 
 type Gateway interface {
-	BeginTx(ctx context.Context) (*sql.Tx, error)
-	Query(ctx context.Context, into SQLParsable, qry string, args ...interface{}) error
+	Txn(ctx context.Context) (Txn, error)
+	Query(ctx context.Context, into utils.SQLReadable, qry string, args ...interface{}) error
 }
 
 type gateway struct {

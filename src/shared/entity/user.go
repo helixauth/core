@@ -56,3 +56,7 @@ func (us *Users) FromSQL(rows *sql.Rows) error {
 	}
 	return nil
 }
+
+func (u *User) SQLTable() string {
+	return "users"
+}

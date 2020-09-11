@@ -31,3 +31,7 @@ func (s *Session) FromSQL(rows *sql.Rows) error {
 	}
 	return utils.SQLParseRow(rows, s)
 }
+
+func (s *Session) SQLTable() string {
+	return "sessions"
+}

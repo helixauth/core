@@ -19,9 +19,13 @@ type Tenant struct {
 }
 
 // FromSQL parses a Tenant entity from a SQL row
-func (s *Tenant) FromSQL(rows *sql.Rows) error {
+func (t *Tenant) FromSQL(rows *sql.Rows) error {
 	if !rows.Next() {
 		return nil
 	}
-	return utils.SQLParseRow(rows, s)
+	return utils.SQLParseRow(rows, t)
+}
+
+func (t *Tenant) SQLTable() string {
+	return "tenants"
 }
