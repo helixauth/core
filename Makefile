@@ -24,7 +24,7 @@ test:
 	go test -cover $(PKGS)
 
 # Start helix with hot-reloading
-start:
+dev:
 	docker-compose up -d
 
 # Stop the local instance
