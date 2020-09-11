@@ -10,6 +10,8 @@ import (
 	"github.com/helixauth/helix/src/shared/database"
 	"github.com/helixauth/helix/src/shared/email"
 	"github.com/helixauth/helix/src/shared/entity"
+
+	"github.com/dchest/uniuri"
 )
 
 func main() {
@@ -58,9 +60,26 @@ func loadTenant(ctx context.Context, database database.Gateway) {
 	}
 	tenant.ID = tenantID
 	if err = txn.Insert(ctx, tenant); err != nil {
-		txn.Rollback()
 		panic(err)
 	}
+
+	// Create first-party client
+	client := &entity.Client{
+		ID:                uniuri.NewLen(32),
+		TenantID:          tenantID,
+		Name:              nil,
+		Secret:            nil,
+		Picture:           nil,
+		Website:           nil,
+		Description:       nil,
+		PrivacyPolicy:     nil,
+		IsThirdParty:      false,
+		AuthorizedDomains: []string{"localhost:3000"},
+	}
+	if err = txn.Insert(ctx, client); err != nil {
+		panic(err)
+	}
+
 	if err = txn.Commit(); err != nil {
 		panic(err)
 	}

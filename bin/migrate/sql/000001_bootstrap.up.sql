@@ -52,13 +52,13 @@ CREATE POLICY users_tenant_isolation_policy ON users
 CREATE TABLE IF NOT EXISTS clients (
   id                 TEXT PRIMARY KEY,
   tenant_id          TEXT NOT NULL REFERENCES tenants(id),
-  name               TEXT NOT NULL,
-  secret             TEXT NOT NULL,
-  logo               TEXT DEFAULT NULL,
-  url                TEXT DEFAULT NULL,
+  name               TEXT DEFAULT NULL,
+  secret             TEXT DEFAULT NULL,
+  picture            TEXT DEFAULT NULL,
+  website            TEXT DEFAULT NULL,
   description        TEXT DEFAULT NULL,
   privacy_policy     TEXT DEFAULT NULL,
-  is_third_part      BOOLEAN DEFAULT true,
+  is_third_party     BOOLEAN DEFAULT true,
   authorized_domains TEXT[]
 );
 

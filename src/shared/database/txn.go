@@ -9,6 +9,8 @@ import (
 
 	"github.com/helixauth/helix/cfg"
 	"github.com/helixauth/helix/src/shared/utils"
+
+	"github.com/lib/pq"
 )
 
 func (g *gateway) Txn(ctx context.Context) (Txn, error) {
@@ -49,12 +51,20 @@ func (txn *txn) Insert(ctx context.Context, item utils.SQLWritable) error {
 		if tag := t.Field(i).Tag.Get("json"); tag != "" {
 			fNames = append(fNames, tag)
 			fPlaceholders = append(fPlaceholders, fmt.Sprintf("$%v", len(fPlaceholders)+1))
-			fValues = append(fValues, v.Elem().Field(i).Interface())
+			switch v.Elem().Field(i).Kind() {
+			case reflect.Slice:
+				fValues = append(fValues, pq.Array(v.Elem().Field(i).Interface()))
+			default:
+				fValues = append(fValues, v.Elem().Field(i).Interface())
+			}
 		}
 	}
 	cmd += fmt.Sprintf(" (%v)", strings.Join(fNames, ", "))
 	cmd += fmt.Sprintf(" VALUES (%v)", strings.Join(fPlaceholders, ", "))
 	_, err := txn.tx.ExecContext(ctx, cmd, fValues...)
+	if err != nil {
+		txn.Rollback()
+	}
 	return err
 }
 
