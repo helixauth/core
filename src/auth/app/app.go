@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/helixauth/helix/cfg"
-	"github.com/helixauth/helix/src/shared/database"
-	"github.com/helixauth/helix/src/shared/email"
+	"github.com/helixauth/helix/src/lib/database"
+	"github.com/helixauth/helix/src/lib/email"
 
 	"github.com/gin-gonic/gin"
 )

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/helixauth/helix/src/shared/utils"
+	"github.com/helixauth/helix/src/lib/utils"
 
 	"github.com/gin-gonic/gin"
 )

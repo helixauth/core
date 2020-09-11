@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/helixauth/helix/src/admin/app"
-	"github.com/helixauth/helix/src/shared/database"
+	"github.com/helixauth/helix/src/lib/database"
 
 	"github.com/gin-gonic/gin"
 )

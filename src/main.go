@@ -7,10 +7,10 @@ import (
 
 	"github.com/helixauth/helix/cfg"
 	"github.com/helixauth/helix/src/admin"
-	"github.com/helixauth/helix/src/oidc"
-	"github.com/helixauth/helix/src/shared/database"
-	"github.com/helixauth/helix/src/shared/email"
-	"github.com/helixauth/helix/src/shared/entity"
+	"github.com/helixauth/helix/src/auth"
+	"github.com/helixauth/helix/src/entity"
+	"github.com/helixauth/helix/src/lib/database"
+	"github.com/helixauth/helix/src/lib/email"
 
 	"github.com/dchest/uniuri"
 	_ "github.com/lib/pq"
@@ -36,7 +36,7 @@ func main() {
 
 	// Run apps
 	go admin.Run(ctx, database)
-	oidc.Run(ctx, database, email)
+	auth.Run(ctx, database, email)
 }
 
 func loadTenant(ctx context.Context, database database.Gateway) {

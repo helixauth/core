@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/helixauth/helix/src/shared/entity"
-	"github.com/helixauth/helix/src/shared/utils"
+	"github.com/helixauth/helix/src/entity"
+	"github.com/helixauth/helix/src/lib/utils"
 
 	"github.com/dchest/uniuri"
 	"github.com/gin-gonic/gin"

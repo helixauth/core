@@ -1,12 +1,12 @@
-package oidc
+package auth
 
 import (
 	"context"
 	"os"
 
-	"github.com/helixauth/helix/src/oidc/app"
-	"github.com/helixauth/helix/src/shared/database"
-	"github.com/helixauth/helix/src/shared/email"
+	"github.com/helixauth/helix/src/auth/app"
+	"github.com/helixauth/helix/src/lib/database"
+	"github.com/helixauth/helix/src/lib/email"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +14,7 @@ import (
 func Run(ctx context.Context, database database.Gateway, email email.Gateway) {
 	app := app.New(ctx, database, email)
 	wd, _ := os.Getwd()
-	public := wd + "/src/oidc/public"
+	public := wd + "/src/auth/public"
 	html := public + "/html/*"
 	r := gin.New()
 	r.Use(gin.Logger())
