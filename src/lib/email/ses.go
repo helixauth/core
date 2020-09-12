@@ -5,8 +5,12 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/helixauth/helix/src/entity"
+	"github.com/helixauth/helix/src/lib/mapper"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ses"
 )
@@ -16,20 +20,16 @@ type sesGateway struct {
 	sesSession *ses.SES
 }
 
-func NewSESGateway(ctx context.Context) (Gateway, error) {
-	// awsSess, err := session.NewSession(&aws.Config{
-	// 	Region:      aws.String(cfg.Email.SES.Region),
-	// 	Credentials: credentials.NewStaticCredentials(cfg.Email.SES.AcessKeyID, cfg.Email.SES.SecretAccessKey, ""),
-	// })
-	// sesSess := ses.New(awsSess)
-	// return &sesGateway{
-	// 	awsSession: awsSess,
-	// 	sesSession: sesSess,
-	// }, err
-
-	// TODO
-
-	return &sesGateway{}, nil
+func NewSESGateway(ctx context.Context, tenant *entity.Tenant) (Gateway, error) {
+	awsSess, err := session.NewSession(&aws.Config{
+		Region:      tenant.AWSRegionID,
+		Credentials: credentials.NewStaticCredentials(mapper.String(tenant.AWSAccessKeyID), mapper.String(tenant.AWSSecretAccessKey), ""),
+	})
+	sesSess := ses.New(awsSess)
+	return &sesGateway{
+		awsSession: awsSess,
+		sesSession: sesSess,
+	}, err
 }
 
 func (g *sesGateway) SendEmail(ctx context.Context, sender string, recipient string, subject string, htmlBody string) error {

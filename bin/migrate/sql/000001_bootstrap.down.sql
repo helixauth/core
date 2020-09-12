@@ -4,10 +4,6 @@ DROP POLICY IF EXISTS email_verifications_tenant_isolation_policy ON email_verif
 
 DROP TABLE IF EXISTS email_verifications;
 
-DROP POLICY IF EXISTS sessions_tenant_isolation_policy ON sessions;
-
-DROP TABLE IF EXISTS sessions;
-
 DROP POLICY IF EXISTS users_tenant_isolation_policy ON users;
 
 DROP TABLE IF EXISTS users;

@@ -81,27 +81,6 @@ ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 CREATE POLICY users_tenant_isolation_policy ON users
     USING (tenant_id = current_setting('app.tenant_id'));
 
-CREATE TABLE IF NOT EXISTS sessions (
-  id            TEXT PRIMARY KEY,
-  tenant_id     TEXT NOT NULL REFERENCES tenants(id),
-  client_id     TEXT NOT NULL REFERENCES clients(id),
-  user_id       TEXT DEFAULT NULL REFERENCES users(id),
-  response_type TEXT NOT NULL,
-  scope         TEXT NOT NULL,
-  state         TEXT NOT NULL,
-  nonce         TEXT NOT NULL,
-  redirect_uri  TEXT NOT NULL,
-  code          TEXT NOT NULL,
-  created_at    TIMESTAMP NOT NULL,
-  claimed_at    TIMESTAMP DEFAULT NULL,
-  refreshed_at  TIMESTAMP DEFAULT NULL
-);
-
-ALTER TABLE sessions ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY sessions_tenant_isolation_policy ON sessions
-    USING (tenant_id = current_setting('app.tenant_id'));
-
 CREATE TABLE IF NOT EXISTS email_verifications (
   id         TEXT PRIMARY KEY,
   tenant_id  TEXT NOT NULL REFERENCES tenants(id),

@@ -9,3 +9,11 @@ func BoolPtr(b bool) *bool {
 func StringPtr(s string) *string {
 	return &s
 }
+
+// String maps a string pointer to a string
+func String(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
+}

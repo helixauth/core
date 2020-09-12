@@ -19,17 +19,17 @@ import (
 func main() {
 	ctx := cfg.Configure(context.Background())
 
-	// Connect to the database
+	// Connect to database
 	database, err := database.New(ctx)
 	if err != nil {
 		panic(err)
 	}
 
-	// Load the tenant
-	loadTenant(ctx, database)
+	// Load tenant
+	tenant := loadTenant(ctx, database)
 
-	// TODO make this dynamic
-	email, err := email.New(ctx)
+	// Connect to email provider
+	email, err := email.New(ctx, tenant)
 	if err != nil {
 		panic(err)
 	}
@@ -39,7 +39,7 @@ func main() {
 	auth.Run(ctx, database, email)
 }
 
-func loadTenant(ctx context.Context, database database.Gateway) {
+func loadTenant(ctx context.Context, database database.Gateway) *entity.Tenant {
 
 	// Get tenant ID
 	tenantID, ok := ctx.Value(cfg.TenantID).(string)
@@ -52,7 +52,7 @@ func loadTenant(ctx context.Context, database database.Gateway) {
 	tenant := &entity.Tenant{}
 	err := database.QueryItem(ctx, tenant, `SELECT * FROM tenants WHERE id = $1`, tenantID)
 	if err == nil {
-		return
+		return tenant
 	} else if err != sql.ErrNoRows {
 		panic(err)
 	}
@@ -87,4 +87,6 @@ func loadTenant(ctx context.Context, database database.Gateway) {
 	if err = txn.Commit(); err != nil {
 		panic(err)
 	}
+
+	return tenant
 }
