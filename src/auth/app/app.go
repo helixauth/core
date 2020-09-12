@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// App provides an interface to the auth application (i.e. OAuth2/OIDC server)
 type App interface {
 	Authorize(c *gin.Context)
 	Configuration(c *gin.Context)
@@ -27,6 +28,7 @@ type app struct {
 	Email    email.Gateway
 }
 
+// New creates a new auth application
 func New(ctx context.Context, database database.Gateway, email email.Gateway) App {
 	return &app{
 		TenantID: ctx.Value(cfg.TenantID).(string),
