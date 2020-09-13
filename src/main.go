@@ -78,7 +78,7 @@ func loadTenant(ctx context.Context, database database.Gateway) *entity.Tenant {
 		Description:       nil,
 		PrivacyPolicy:     nil,
 		IsThirdParty:      false,
-		AuthorizedDomains: []string{"localhost:3000"},
+		AuthorizedDomains: "localhost:3000",
 	}
 	if err = txn.Insert(ctx, client); err != nil {
 		panic(err)

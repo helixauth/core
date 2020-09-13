@@ -20,5 +20,4 @@ func JWT(ctx context.Context, claims map[string]interface{}, expiresAt time.Time
 	default:
 		return "", fmt.Errorf("Signing method %v not supported", sig)
 	}
-
 }

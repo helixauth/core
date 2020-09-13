@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/helixauth/helix/src/auth/app/oauth"
@@ -28,7 +29,8 @@ type formInput struct {
 
 // Authorize is the handler for the /authorize endpoint
 func (a *app) Authorize(c *gin.Context) {
-	form := formInput{}
+
+	// Parse OAuth params
 	params := oauth.Params{}
 	if err := c.BindQuery(&params); err != nil {
 		c.HTML(
@@ -39,26 +41,41 @@ func (a *app) Authorize(c *gin.Context) {
 		return
 	}
 
-	// TODO validate the oauth params
+	// Validate OAuth params
+	ctx := a.context(c)
+	if err := a.validateOAuthParams(ctx, params); err != nil {
+		c.HTML(
+			http.StatusBadRequest,
+			"error.html",
+			gin.H{"error": err.Error()},
+		)
+		return
+	}
 
+	// Process request
 	switch c.Request.Method {
 	case http.MethodGet:
 		render(c, params, nil, nil)
 
 	case http.MethodPost:
+		form := formInput{}
 		if err := c.Bind(&form); err != nil {
 			render(c, params, nil, err)
 			return
 		}
-		a.processForm(c, params, form)
+		dest, err := a.processForm(ctx, params, form)
+		if err != nil {
+			render(c, params, &form, err)
+		} else {
+			c.Redirect(http.StatusFound, dest)
+		}
 
 	default:
 		render(c, params, nil, nil)
 	}
 }
 
-func (a *app) processForm(c *gin.Context, params oauth.Params, form formInput) {
-	ctx := a.context(c)
+func (a *app) processForm(ctx context.Context, params oauth.Params, form formInput) (string, error) {
 
 	// Query for existing users with the email address in the form
 	userNotFound := false
@@ -67,14 +84,12 @@ func (a *app) processForm(c *gin.Context, params oauth.Params, form formInput) {
 	if err == sql.ErrNoRows {
 		userNotFound = true
 	} else if err != nil {
-		render(c, params, &form, err)
-		return
+		return "", err
 	}
 
 	txn, err := a.Database.BeginTxn(ctx)
 	if err != nil {
-		render(c, params, &form, err)
-		return
+		return "", err
 	}
 
 	// Register a new user or authenticate the existing user
@@ -82,33 +97,32 @@ func (a *app) processForm(c *gin.Context, params oauth.Params, form formInput) {
 		if params.IsSignUp() {
 			user, err = a.registerUser(ctx, params, form, txn)
 		} else {
-			render(c, params, &form, fmt.Errorf("Incorrect email or password"))
-			return
+			return "", fmt.Errorf("Incorrect email or password")
 		}
 	} else {
 		err = a.authenticateUser(user, form)
 	}
 	if err != nil {
-		render(c, params, &form, err)
-		return
+		return "", err
 	}
 
 	err = txn.Commit()
 	if err != nil {
-		render(c, params, &form, err)
-		return
+		return "", err
 	}
 
 	// Start a new user session
 	code, err := a.generateAuthorizationCode(ctx, params, user)
 	if err != nil {
-		render(c, params, &form, err)
-		return
+		return "", err
 	}
 
 	// Redirect to the provided redirect URI with session code and state
-	dest := "https://" + mapper.String(params.RedirectURI) + fmt.Sprintf("?code=%v&state=%v", code, params.State)
-	c.Redirect(http.StatusFound, dest)
+	dest := fmt.Sprintf("https://%v?code=%v", mapper.String(params.RedirectURI), code)
+	if state := params.State; state != nil {
+		dest = fmt.Sprintf("%v&state=%v", dest, state)
+	}
+	return dest, nil
 }
 
 // registerUser creates a new user
@@ -147,8 +161,34 @@ func (a *app) authenticateUser(user *entity.User, form formInput) error {
 }
 
 func (a *app) validateOAuthParams(ctx context.Context, params oauth.Params) error {
-	// TODO validate the client and request
+	client, err := a.getClient(ctx, params.ClientID)
+	if err != nil {
+		return fmt.Errorf("'client_id' is invalid")
+	}
+
+	if params.RedirectURI == nil {
+		return fmt.Errorf("'redirect_uri' is invalid")
+	}
+
+	isRedirectURIAuthorized := false
+	for _, uri := range strings.Split(client.AuthorizedDomains, " ") {
+		if *params.RedirectURI == uri {
+			isRedirectURIAuthorized = true
+		}
+	}
+
+	if !isRedirectURIAuthorized {
+		return fmt.Errorf("'redirect_uri' is invalid")
+	}
+
 	return nil
+}
+
+// getClient fetches a client for the client ID
+func (a *app) getClient(ctx context.Context, clientID string) (*entity.Client, error) {
+	client := &entity.Client{}
+	err := a.Database.QueryItem(ctx, client, `SELECT * FROM clients WHERE id = $1`, clientID)
+	return client, err
 }
 
 // render renders the authorization form on screen
@@ -179,6 +219,7 @@ func render(c *gin.Context, params oauth.Params, form *formInput, err error) {
 	c.HTML(http.StatusOK, "signIn.html", tmplParams)
 }
 
+// generateAuthorizationCode generates an authorization code for the authorization_code grant flow
 func (a *app) generateAuthorizationCode(ctx context.Context, params oauth.Params, user *entity.User) (string, error) {
 	claims := map[string]interface{}{
 		"jti":          uniuri.NewLen(uniuri.UUIDLen),

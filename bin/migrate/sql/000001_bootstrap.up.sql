@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS clients (
   description        TEXT DEFAULT NULL,
   privacy_policy     TEXT DEFAULT NULL,
   is_third_party     BOOLEAN DEFAULT true,
-  authorized_domains TEXT[]
+  authorized_domains TEXT DEFAULT ''
 );
 
 ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
