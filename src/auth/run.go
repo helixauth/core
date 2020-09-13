@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"html/template"
 	"os"
 
 	"github.com/helixauth/helix/src/auth/app"
@@ -19,10 +20,12 @@ func Run(ctx context.Context, database database.Gateway, email email.Gateway) {
 	html := public + "/html/*"
 	r := gin.New()
 	r.Use(gin.Logger())
+	r.SetFuncMap(template.FuncMap{
+		"safeURL": func(u string) template.URL { return template.URL(u) },
+	})
 	r.LoadHTMLGlob(html)
 	r.Static("/public", public)
 	r.GET("/", app.Index)
-	// r.POST("/authenticate", app.Authenticate)
 	r.GET("/authorize", app.Authorize)
 	r.POST("/authorize", app.Authorize)
 	r.GET("/introspect", app.Introspect)

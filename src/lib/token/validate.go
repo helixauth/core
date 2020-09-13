@@ -7,8 +7,9 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-func Validate(ctx context.Context, tknStr string, sig jwt.SigningMethod) (map[string]interface{}, error) {
-	tkn, err := jwt.Parse(tknStr, func(t *jwt.Token) (interface{}, error) {
+// Validate validates a JWT and returns its claims
+func Validate(ctx context.Context, jwtStr string, sig jwt.SigningMethod) (map[string]interface{}, error) {
+	tkn, err := jwt.Parse(jwtStr, func(t *jwt.Token) (interface{}, error) {
 		if t.Method != sig {
 			return nil, fmt.Errorf("Unexpected signing method: %v", t.Header["alg"])
 		}
@@ -17,6 +18,8 @@ func Validate(ctx context.Context, tknStr string, sig jwt.SigningMethod) (map[st
 	if err != nil {
 		return nil, err
 	}
+
+	// TODO validate issuer
 
 	if claims, ok := tkn.Claims.(jwt.MapClaims); ok && tkn.Valid {
 		return claims, nil

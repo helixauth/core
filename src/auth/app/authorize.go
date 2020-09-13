@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/helixauth/helix/src/auth/app/oauth"
@@ -119,8 +118,8 @@ func (a *app) processForm(ctx context.Context, params oauth.Params, form formInp
 
 	// Redirect to the provided redirect URI with session code and state
 	dest := fmt.Sprintf("https://%v?code=%v", mapper.String(params.RedirectURI), code)
-	if state := params.State; state != nil {
-		dest = fmt.Sprintf("%v&state=%v", dest, state)
+	if params.State != nil {
+		dest = fmt.Sprintf("%v&state=%v", dest, *params.State)
 	}
 	return dest, nil
 }
@@ -171,7 +170,7 @@ func (a *app) validateOAuthParams(ctx context.Context, params oauth.Params) erro
 	}
 
 	isRedirectURIAuthorized := false
-	for _, uri := range strings.Split(client.AuthorizedDomains, " ") {
+	for _, uri := range client.AuthorizedDomains {
 		if *params.RedirectURI == uri {
 			isRedirectURIAuthorized = true
 		}
@@ -194,7 +193,7 @@ func (a *app) getClient(ctx context.Context, clientID string) (*entity.Client, e
 // render renders the authorization form on screen
 func render(c *gin.Context, params oauth.Params, form *formInput, err error) {
 	tmplParams := gin.H{
-		"action":   c.Request.URL.RawPath + "?" + c.Request.URL.RawQuery,
+		"action":   fmt.Sprintf(`%v?%v`, c.Request.URL.RawPath, c.Request.URL.RawQuery),
 		"email":    nil,
 		"password": nil,
 		"error":    nil,

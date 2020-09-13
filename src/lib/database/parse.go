@@ -3,6 +3,8 @@ package database
 import (
 	"database/sql"
 	"reflect"
+
+	"github.com/lib/pq"
 )
 
 func parseRow(row *sql.Row, item interface{}) error {
@@ -55,12 +57,21 @@ func scan(s scannable, vItem reflect.Value) error {
 	// Create slice of pointers
 	// Each pointer's value type matches a field type of the struct being written to
 	ptrs := make([]interface{}, vItem.NumField())
+	pqWrappedPtrs := make([]interface{}, vItem.NumField())
 	for i := 0; i < vItem.NumField(); i++ {
-		ptrs[i] = reflect.New(vItem.Field(i).Type()).Interface()
+		vField := vItem.Field(i)
+		ptr := reflect.New(vField.Type()).Interface()
+		ptrs[i] = ptr
+		switch vField.Kind() {
+		case reflect.Slice:
+			pqWrappedPtrs[i] = pq.Array(ptr)
+		default:
+			pqWrappedPtrs[i] = ptr
+		}
 	}
 
 	// Scan row in the pointer values
-	if err := s.Scan(ptrs...); err != nil {
+	if err := s.Scan(pqWrappedPtrs...); err != nil {
 		return err
 	}
 
