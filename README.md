@@ -51,7 +51,7 @@ $ {apt,yum,brew} install gnupg2
 ```
 
 2. If you don't already have a GPG key, generate one with the command below. You will be asked for your full name and email address. When the information is okay, press "o" and "enter". You will be asked to set a optional password. For example:
-```
+<pre lang="sh">
 $ gpg --generate-key
 gpg (GnuPG) 2.2.15; Copyright (C) 2019 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
@@ -75,10 +75,10 @@ gpg: key 411F71D23B22E116 marked as ultimately trusted
 gpg: revocation certificate stored as '/Users/jdoe/.gnupg/openpgp-revocs.d/0AB19F525F991CC847F744CA411F71D23B22E116.rev'
 public and secret key created and signed.
 pub   rsa2048 2019-05-17 [SC] [expires: 2021-05-16]
-      **0AB19F525F991CC847F744CA411F71D23B22E116**
+      <b>0AB19F525F991CC847F744CA411F71D23B22E116</b>
 uid                      J Doe <jdoe@email.com>
 sub   rsa2048 2019-05-17 [E] [expires: 2021-05-16]
-```
+</pre>
 
 3. Now you have a PGP fingerprint (`0AB19F525F991CC847F744CA411F71D23B22E116` in the example above), you can register your public key to a public key server such as https://keyserver.ubuntu.com/. Simply export your public key, paste it into the key submission box, and press 'Submit'.
 ```sh
