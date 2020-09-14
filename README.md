@@ -24,9 +24,9 @@ $ cat jwtRS256.key
 $ cat jwtRS256.key.pub
 ```
 
-To copy a key (useful for the secrets configuration section below):
+When setting your secrets managmenet (in the section below), it will be helpful to base64 encode and copy these keys:
 ```sh
-$ cat jwtRS256.key | pbcopy
+$ cat jwtRS256.key | base64 | pbcopy
 ```
 
 
@@ -47,11 +47,11 @@ To setup SOPS with key managed by AWS KMS, please follow the steps below:
 $ go get -u go.mozilla.org/sops/v3/cmd/sops
 ```
 
-2. Go to your AWS KMS console and create a new symmetric key. Grant your user account permissions to use the key. Additionally grant permissions to the role assigned to your Helix deployment.
+2. Go to your AWS KMS console and create a new symmetric key. Grant your user account permissions to use the key. Additionally grant permissions to the service role assigned to your Helix deployment.
 
 3. Copy the key's ARN and use it generate a new secrets file for your dev environment:
 ```sh
-$ sops --kms '{YOUR_KEY_ARN}' cfg/secrets.dev.yaml
+$ sops --kms '{ARN}' cfg/secrets.dev.yaml
 ```
 
 4. Enter the following secrets:
@@ -72,7 +72,7 @@ jws:
         secret: mysupersecret
 
     rs256:
-        {YOUR_KEY_ID}: 
-            public: "{YOUR_RS256_PUB_KEY}"
-            private: "{YOUR_RS256_PRIVATE_KEY}"
+        {KEY_ID}: 
+            public: {BASE64_ENC_RS256_PUBLIC_KEY}
+            private: {BASE64_ENC_RS256_PRIVATE_KEY}
 ```

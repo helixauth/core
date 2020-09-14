@@ -19,6 +19,11 @@ import (
 func main() {
 	ctx := cfg.Configure(context.Background())
 
+	// secretsManager, err := secrets.New("cfg/secrets-dec.dev.yaml")
+	// if err != nil {
+	// 	panic(err)
+	// }
+
 	// Connect to database
 	database, err := database.New(ctx)
 	if err != nil {

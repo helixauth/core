@@ -17,4 +17,5 @@ require (
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pkg/errors v0.9.1
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a
+	gopkg.in/yaml.v2 v2.3.0
 )
