@@ -39,7 +39,8 @@ func (a *app) Token(c *gin.Context) {
 
 		resp := oauth.TokenResponse{}
 
-		// TODO prevent replay attacks by marking the code as used
+		// TODO prevent replay attacks by marking the authorization code as used
+
 		c.Header("Cache-Control", "no-store")
 		c.Header("Pragma", "no-cache")
 		c.JSON(http.StatusOK, resp)
