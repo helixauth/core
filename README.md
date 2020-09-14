@@ -4,7 +4,7 @@
 ## Install
 
 If you don't have Go installed, install it with:
-```s
+```sh
 $ {apt,yum,brew} install golang
 $ echo 'export GOPATH=~/go' >> ~/.bashrc
 $ source ~/.bashrc
@@ -15,7 +15,7 @@ $ mkdir $GOPATH
 ## Signing Keys
 
 To generate new RS256 key pair for JWT signing:
-```s
+```sh
 $ ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key
 # Don't add passphrase
 
@@ -25,7 +25,7 @@ $ cat jwtRS256.key.pub
 ```
 
 To copy a key (useful for the secrets configuration section below):
-```s
+```sh
 $ cat jwtRS256.key | pbcopy
 ```
 
@@ -43,14 +43,14 @@ For more information on SOPS, please reference the [Youtube video](https://www.y
 To setup SOPS with key managed by AWS KMS, please follow the steps below:
 
 1. Install SOPS onto your local development machine:
-```s
+```sh
 $ go get -u go.mozilla.org/sops/v3/cmd/sops
 ```
 
 2. Go to your AWS KMS console and create a new symmetric key. Grant your user account permissions to use the key. Additionally grant permissions to the role assigned to your Helix deployment.
 
 3. Copy the key's ARN and use it generate a new secrets file for your dev environment:
-```s
+```sh
 $ sops --kms '{YOUR_KEY_ARN}' cfg/secrets.dev.yaml
 ```
 
