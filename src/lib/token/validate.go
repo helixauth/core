@@ -8,6 +8,7 @@ import (
 )
 
 // Validate validates a JWT and returns its claims
+// TODO accept secrets manager and use it to validate signatures
 func Validate(ctx context.Context, jwtStr string, sig jwt.SigningMethod) (map[string]interface{}, error) {
 	tkn, err := jwt.Parse(jwtStr, func(t *jwt.Token) (interface{}, error) {
 		if t.Method != sig {

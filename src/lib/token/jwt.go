@@ -9,6 +9,7 @@ import (
 )
 
 // JWT generates a new JSON Web Token
+// TODO accept secrets manager and use it to load signature keys
 func JWT(ctx context.Context, claims map[string]interface{}, expiresAt time.Time, sig jwt.SigningMethod) (string, error) {
 	tkn := jwt.New(sig)
 	for k, v := range claims {

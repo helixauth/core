@@ -20,19 +20,15 @@ import (
 func main() {
 	ctx := cfg.Configure(context.Background())
 
-	secretsManager, err := secrets.New("cfg/secrets.dec.dev.yaml")
+	// Load secrets
+	// TODO pick secrets file based on HELIX env
+	secrets, err := secrets.New("cfg/secrets.dec.dev.yaml")
 	if err != nil {
 		panic(err)
 	}
 
-	// username, err := secretsManager.Get("postgres.username")
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// log.Printf("%v", username)
-
 	// Connect to database
-	database, err := database.New(ctx, secretsManager)
+	database, err := database.New(ctx, secrets)
 	if err != nil {
 		panic(err)
 	}
@@ -47,6 +43,7 @@ func main() {
 	}
 
 	// Run apps
+	// TODO dependency inject secrets into apps
 	go admin.Run(ctx, database)
 	auth.Run(ctx, database, email)
 }
