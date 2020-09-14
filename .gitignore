@@ -3,4 +3,6 @@
 
 main
 
+cfg/secrets*
+
 *.session.sql
