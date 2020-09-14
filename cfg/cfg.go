@@ -12,23 +12,11 @@ func (k key) String() string {
 }
 
 const (
-	TenantID         = key("TENANT_ID")
-	PostgresUsername = key("POSTGRES_USERNAME")
-	PostgresPassword = key("POSTGRES_PASSWORD")
-	PostgresHost     = key("POSTGRES_HOST")
-	PostgresPort     = key("POSTGRES_PORT")
-	PostgresDBName   = key("POSTGRES_DB_NAME")
-	PostgresSSLMode  = key("POSTGRES_SSL_MODE")
+	TenantID = key("TENANT_ID")
 )
 
 var allKeys = []key{
 	TenantID,
-	PostgresUsername,
-	PostgresPassword,
-	PostgresHost,
-	PostgresPort,
-	PostgresDBName,
-	PostgresSSLMode,
 }
 
 func Configure(ctx context.Context) context.Context {

@@ -25,5 +25,5 @@ main
 cfg/secrets.enc*
 
 # WARNING: DO NOT REMOVE THIS LINE!
-# You risk commiting unencrypted secrets to a remote repository.
+# You risk exposing unencrypted secrets to a remote repository.
 cfg/secrets.dec* 

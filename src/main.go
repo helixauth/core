@@ -25,14 +25,14 @@ func main() {
 		panic(err)
 	}
 
-	username, err := secretsManager.Get("postgres.username")
-	if err != nil {
-		panic(err)
-	}
-	log.Printf("%v", username)
+	// username, err := secretsManager.Get("postgres.username")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// log.Printf("%v", username)
 
 	// Connect to database
-	database, err := database.New(ctx)
+	database, err := database.New(ctx, secretsManager)
 	if err != nil {
 		panic(err)
 	}

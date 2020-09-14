@@ -8,8 +8,8 @@ import (
 	yaml "gopkg.in/yaml.v2"
 )
 
-// SecretsManager provides an interface for fetching secrets
-type SecretsManager interface {
+// Manager provides an interface for fetching secrets
+type Manager interface {
 	Get(key string) (interface{}, error)
 }
 
@@ -17,8 +17,8 @@ type manager struct {
 	secrets map[interface{}]interface{}
 }
 
-// New creates a new SecretsManager
-func New(filename string) (SecretsManager, error) {
+// New creates a new Manager
+func New(filename string) (Manager, error) {
 	yamlFile, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
