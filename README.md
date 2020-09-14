@@ -51,7 +51,7 @@ $ {apt,yum,brew} install gnupg2
 ```
 
 2. If you don't already have a GPG key, generate one with the command below. You will be asked for your full name and email address. When the information is okay, press "o" and "enter". You will be asked to set a optional password. For example:
-<pre lang="sh">
+```sh
 $ gpg --generate-key
 gpg (GnuPG) 2.2.15; Copyright (C) 2019 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
@@ -75,25 +75,26 @@ gpg: key 411F71D23B22E116 marked as ultimately trusted
 gpg: revocation certificate stored as '/Users/jdoe/.gnupg/openpgp-revocs.d/0AB19F525F991CC847F744CA411F71D23B22E116.rev'
 public and secret key created and signed.
 pub   rsa2048 2019-05-17 [SC] [expires: 2021-05-16]
-      <b>0AB19F525F991CC847F744CA411F71D23B22E116</b>
+      0AB19F525F991CC847F744CA411F71D23B22E116
 uid                      J Doe <jdoe@email.com>
 sub   rsa2048 2019-05-17 [E] [expires: 2021-05-16]
-</pre>
+```
 
-3. Now you have a PGP fingerprint (`0AB19F525F991CC847F744CA411F71D23B22E116` in the example above), you can register your public key to a public key server such as https://keyserver.ubuntu.com/. Simply export your public key, paste it into the key submission box, and press 'Submit'.
+3. Now you have a PGP fingerprint (e.g. `0AB19F525F991CC847F744CA411F71D23B22E116`). You can register your public key to a public key server such as https://keyserver.ubuntu.com/. Simply export your public key, paste it into the key submission box, and press 'Submit'.
 ```sh
 $ gpg --armor --export jdoe@email.com | pbcopy
 ```
 
-4. Configure SOPS to use PGP and point at your public key server. `SOPS_GPG_EXEC` points to the GPG binary. `SOPS_PGP_FP` is a list is a list of comma separated fingerprints. Add the fingerprints of all team members that are allowed to access your Helix secrets. `SOPS_GPG_KEYSERVER` points to the key server where you and your team have registered your public keys.
+4. In `cfg/dev.env`, add the following 3 environment variables to configure SOPS to use PGP and point at your public key server. `SOPS SOPS_GPG_EXEC` points to the GPG binary. `SOPS_GPG_KEYSERVER` points to the key server where you and your team have registered your public keys. `SOPS_PGP_FP` is a list is a list of comma separated fingerprints. Add the fingerprints of all team members that are allowed to access your Helix secrets.
 ```sh
-export SOPS_GPG_EXEC="gpg"
-export SOPS_PGP_FP="0AB19F525F991CC847F744CA411F71D23B22E116"
-export SOPS_GPG_KEYSERVER="keyserver.ubuntu.com"
+SOPS_GPG_EXEC="gpg"
+SOPS_GPG_KEYSERVER="keyserver.ubuntu.com"
+SOPS_PGP_FP="0AB19F525F991CC847F744CA411F71D23B22E116" # replace with your own PGP fingerprint
 ```
 
-5. Create a new secrets file with the following command:
+5. Source the new environment variables set above, and create a new secrets file with the following command:
 ```sh
+$ source cfg/dev.env
 $ sops cfg/secrets.enc.dev.yaml
 ```
 
@@ -109,7 +110,7 @@ postgres:
 
 jws:
     hs256:
-        secret: mysupersecret # Feel free to rename this
+        secret: mysupersecret # Rename this to a randomized string
     rs256:
         {KEY_ID}: 
             public: {BASE64_ENC_RS256_PUBLIC_KEY} # Please see the JWS Keys section above
