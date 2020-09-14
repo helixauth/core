@@ -25,7 +25,8 @@ test:
 
 # Start helix with hot-reloading
 dev:
-	docker-compose up -d
+	source cfg/dev.env; sops -d cfg/secrets.enc.dev.yaml > cfg/secrets.dec.dev.yaml ; \
+	docker-compose up -d ; \
 
 # Stop the local instance
 stop:
@@ -34,11 +35,6 @@ stop:
 # Display the logs
 logs:
 	docker-compose logs -f
-
-# Starts Helix and migrates the database to the latest version
-bootstrap:
-	make start ; \
-	make db/up
 
 # Connect to the local PostgeSQL instance
 db/connect:

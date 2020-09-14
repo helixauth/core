@@ -11,6 +11,7 @@ import (
 	"github.com/helixauth/helix/src/entity"
 	"github.com/helixauth/helix/src/lib/database"
 	"github.com/helixauth/helix/src/lib/email"
+	"github.com/helixauth/helix/src/lib/secrets"
 
 	"github.com/dchest/uniuri"
 	_ "github.com/lib/pq"
@@ -19,10 +20,16 @@ import (
 func main() {
 	ctx := cfg.Configure(context.Background())
 
-	// secretsManager, err := secrets.New("cfg/secrets-dec.dev.yaml")
-	// if err != nil {
-	// 	panic(err)
-	// }
+	secretsManager, err := secrets.New("cfg/secrets.dec.dev.yaml")
+	if err != nil {
+		panic(err)
+	}
+
+	username, err := secretsManager.Get("postgres.username")
+	if err != nil {
+		panic(err)
+	}
+	log.Printf("%v", username)
 
 	// Connect to database
 	database, err := database.New(ctx)
