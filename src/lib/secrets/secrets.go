@@ -1,9 +1,7 @@
 package secrets
 
 import (
-	"fmt"
 	"io/ioutil"
-	"strings"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -31,33 +29,4 @@ func New(filename string) (Manager, error) {
 	return &manager{
 		secrets: secrets,
 	}, nil
-}
-
-// Get retrieves a secret for the provided key
-func (m *manager) Get(key string) (interface{}, error) {
-	keys := strings.Split(key, ".")
-	secrets := m.secrets
-	for i, k := range keys {
-		if i == len(keys)-1 {
-			return secrets[k], nil
-		}
-		ok := true
-		if secrets, ok = secrets[k].(map[interface{}]interface{}); !ok {
-			return nil, fmt.Errorf("No secret for key '%v", key)
-		}
-	}
-	return "", fmt.Errorf("Invalid key '%v", key)
-}
-
-// Get retrieves a secret string for the provided key
-func (m *manager) GetString(key string) (string, error) {
-	sec, err := m.Get(key)
-	if err != nil {
-		return "", err
-	}
-	secStr, ok := sec.(string)
-	if secStr == "" || !ok {
-		return "", fmt.Errorf("Secret is not available")
-	}
-	return secStr, nil
 }
