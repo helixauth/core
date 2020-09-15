@@ -5,7 +5,7 @@ import "fmt"
 // ConnInfo contains the information needed to connect to a PostgreSQL database
 type ConnInfo struct {
 	Host     string
-	Port     string
+	Port     int
 	Username string
 	Password string
 	DBName   string

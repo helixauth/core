@@ -120,7 +120,7 @@ func getDatabaseConnInfo(secrets secrets.Manager) (database.ConnInfo, error) {
 		}
 	}
 	connInfo.Host = connArgs["postgres.host"].(string)
-	connInfo.Port = connArgs["postgres.port"].(string)
+	connInfo.Port = connArgs["postgres.port"].(int)
 	connInfo.Username = connArgs["postgres.username"].(string)
 	connInfo.Password = connArgs["postgres.password"].(string)
 	connInfo.DBName = connArgs["postgres.db_name"].(string)
