@@ -9,8 +9,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/helixauth/helix/src/lib/secrets"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 // JWT generates a new JSON Web Token

@@ -8,8 +8,9 @@ import (
 	"encoding/pem"
 	"fmt"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/helixauth/helix/src/lib/secrets"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 // Validate validates a JWT and returns its claims
