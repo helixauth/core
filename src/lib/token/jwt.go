@@ -54,7 +54,7 @@ func JWT(
 				if err != nil {
 					return "", err
 				}
-				key, err := parseRSA256SigningKey(strBase64)
+				key, err := parseRSA256PrivateKey(strBase64)
 				if err != nil {
 					return "", err
 				}
@@ -68,7 +68,7 @@ func JWT(
 	}
 }
 
-func parseRSA256SigningKey(str string) (*rsa.PrivateKey, error) {
+func parseRSA256PrivateKey(str string) (*rsa.PrivateKey, error) {
 	keyBytes, err := base64.StdEncoding.DecodeString(str)
 	if err != nil {
 		return nil, err

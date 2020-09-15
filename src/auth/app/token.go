@@ -13,6 +13,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Token is the handler for the /token endpoint
 func (a *app) Token(c *gin.Context) {
 
 	// Parse request
@@ -38,6 +39,7 @@ func (a *app) Token(c *gin.Context) {
 			panic(err)
 		}
 
+		// Generate ID token
 		claims := map[string]interface{}{}
 		exp := time.Now().UTC().Add(5 * 60 * time.Second)
 		idToken, err := token.JWT(ctx, claims, exp, jwt.SigningMethodRS256, a.Secrets)
@@ -48,6 +50,7 @@ func (a *app) Token(c *gin.Context) {
 
 		// TODO prevent replay attacks by marking the authorization code as used
 
+		// Respond
 		resp := oauth.TokenResponse{
 			IDToken: idToken,
 		}
