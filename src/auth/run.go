@@ -8,13 +8,18 @@ import (
 	"github.com/helixauth/helix/src/auth/app"
 	"github.com/helixauth/helix/src/lib/database"
 	"github.com/helixauth/helix/src/lib/email"
+	"github.com/helixauth/helix/src/lib/secrets"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Run starts the auth application (OAuth2/OIDC server)
-func Run(ctx context.Context, database database.Gateway, email email.Gateway) {
-	app := app.New(ctx, database, email)
+func Run(ctx context.Context,
+	database database.Gateway,
+	email email.Gateway,
+	secrets secrets.Manager) {
+
+	app := app.New(ctx, database, email, secrets)
 	wd, _ := os.Getwd()
 	public := wd + "/src/auth/public"
 	html := public + "/html/*"

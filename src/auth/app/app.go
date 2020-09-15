@@ -6,6 +6,7 @@ import (
 	"github.com/helixauth/helix/cfg"
 	"github.com/helixauth/helix/src/lib/database"
 	"github.com/helixauth/helix/src/lib/email"
+	"github.com/helixauth/helix/src/lib/secrets"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,14 +27,19 @@ type app struct {
 	TenantID string
 	Database database.Gateway
 	Email    email.Gateway
+	Secrets  secrets.Manager
 }
 
 // New creates a new auth application
-func New(ctx context.Context, database database.Gateway, email email.Gateway) App {
+func New(ctx context.Context,
+	database database.Gateway,
+	email email.Gateway,
+	secrets secrets.Manager) App {
 	return &app{
 		TenantID: ctx.Value(cfg.TenantID).(string),
 		Database: database,
 		Email:    email,
+		Secrets:  secrets,
 	}
 }
 

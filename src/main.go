@@ -43,9 +43,8 @@ func main() {
 	}
 
 	// Run apps
-	// TODO dependency inject secrets into apps
 	go admin.Run(ctx, database)
-	auth.Run(ctx, database, email)
+	auth.Run(ctx, database, email, secrets)
 }
 
 func loadTenant(ctx context.Context, database database.Gateway) *entity.Tenant {

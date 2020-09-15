@@ -52,7 +52,7 @@ func (a *app) Token(c *gin.Context) {
 
 // validateAuthorizationCode validates an authorization code for issuing tokens
 func (a *app) validateAuthorizationCode(ctx context.Context, req oauth.TokenRequest) error {
-	claims, err := token.Validate(ctx, req.Code, jwt.SigningMethodHS256)
+	claims, err := token.Validate(ctx, req.Code, jwt.SigningMethodHS256, a.Secrets)
 	if err != nil {
 		panic(err)
 	}

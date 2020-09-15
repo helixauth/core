@@ -227,5 +227,5 @@ func (a *app) generateAuthorizationCode(ctx context.Context, params oauth.Params
 		"user_id":      user.ID,
 	}
 	exp := time.Now().UTC().Add(30 * time.Second)
-	return token.JWT(ctx, claims, exp, jwt.SigningMethodHS256)
+	return token.JWT(ctx, claims, exp, jwt.SigningMethodHS256, a.Secrets)
 }
