@@ -28,7 +28,11 @@ func main() {
 	}
 
 	// Connect to database
-	database, err := database.New(ctx, secrets)
+	connInfo, err := getDatabaseConnInfo(secrets)
+	if err != nil {
+		panic(err)
+	}
+	database, err := database.New(ctx, connInfo)
 	if err != nil {
 		panic(err)
 	}
@@ -97,4 +101,29 @@ func loadTenant(ctx context.Context, database database.Gateway) *entity.Tenant {
 	}
 
 	return tenant
+}
+
+func getDatabaseConnInfo(secrets secrets.Manager) (database.ConnInfo, error) {
+	var err error
+	connInfo := database.ConnInfo{}
+	connArgs := map[string]interface{}{
+		"postgres.host":     "",
+		"postgres.port":     "",
+		"postgres.username": "",
+		"postgres.password": "",
+		"postgres.db_name":  "",
+		"postgres.ssl_mode": "",
+	}
+	for k := range connArgs {
+		if connArgs[k], err = secrets.Get(k); err != nil {
+			return connInfo, err
+		}
+	}
+	connInfo.Host = connArgs["postgres.host"].(string)
+	connInfo.Port = connArgs["postgres.port"].(string)
+	connInfo.Username = connArgs["postgres.username"].(string)
+	connInfo.Password = connArgs["postgres.password"].(string)
+	connInfo.DBName = connArgs["postgres.db_name"].(string)
+	connInfo.SSLMode = connArgs["postgres.ssl_mode"].(string)
+	return connInfo, nil
 }
