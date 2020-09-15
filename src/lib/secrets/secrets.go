@@ -9,6 +9,7 @@ import (
 // Manager provides an interface for fetching secrets
 type Manager interface {
 	Get(key string) (interface{}, error)
+	GetMap(key string) (map[interface{}]interface{}, error)
 	GetString(key string) (string, error)
 }
 

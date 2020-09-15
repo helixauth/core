@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/helixauth/helix/src/auth/app/oauth"
 	"github.com/helixauth/helix/src/lib/token"
@@ -37,10 +38,19 @@ func (a *app) Token(c *gin.Context) {
 			panic(err)
 		}
 
-		resp := oauth.TokenResponse{}
+		claims := map[string]interface{}{}
+		exp := time.Now().UTC().Add(5 * 60 * time.Second)
+		idToken, err := token.JWT(ctx, claims, exp, jwt.SigningMethodRS256, a.Secrets)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 
 		// TODO prevent replay attacks by marking the authorization code as used
 
+		resp := oauth.TokenResponse{
+			IDToken: idToken,
+		}
 		c.Header("Cache-Control", "no-store")
 		c.Header("Pragma", "no-cache")
 		c.JSON(http.StatusOK, resp)

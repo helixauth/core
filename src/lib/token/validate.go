@@ -9,10 +9,12 @@ import (
 )
 
 // Validate validates a JWT and returns its claims
-func Validate(ctx context.Context,
+func Validate(
+	ctx context.Context,
 	jwtStr string,
 	sig jwt.SigningMethod,
-	secrets secrets.Manager) (map[string]interface{}, error) {
+	secrets secrets.Manager,
+) (map[string]interface{}, error) {
 
 	// Parse the JWT string
 	tkn, err := jwt.Parse(jwtStr, func(t *jwt.Token) (interface{}, error) {

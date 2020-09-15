@@ -2,6 +2,10 @@ package token
 
 import (
 	"context"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/base64"
+	"encoding/pem"
 	"fmt"
 	"time"
 
@@ -10,11 +14,13 @@ import (
 )
 
 // JWT generates a new JSON Web Token
-func JWT(ctx context.Context,
+func JWT(
+	ctx context.Context,
 	claims map[string]interface{},
 	expiresAt time.Time,
 	sig jwt.SigningMethod,
-	secrets secrets.Manager) (string, error) {
+	secrets secrets.Manager,
+) (string, error) {
 
 	// Create new token
 	tkn := jwt.New(sig)
@@ -33,7 +39,59 @@ func JWT(ctx context.Context,
 		}
 		return tkn.SignedString([]byte(sec))
 
+	case jwt.SigningMethodRS256:
+		secs, err := secrets.GetMap("jws.rs256")
+		if err != nil {
+			return "", err
+		}
+
+		// Naive strategy: choose first RSA256 key
+		// TODO pick an available key at random
+		for sec := range secs {
+			if kid, ok := sec.(string); ok {
+				tkn.Claims.(jwt.MapClaims)["kid"] = kid
+				strBase64, err := secrets.GetString(fmt.Sprintf("jws.rs256.%v.private", kid))
+				if err != nil {
+					return "", err
+				}
+				key, err := parseRSA256SigningKey(strBase64)
+				if err != nil {
+					return "", err
+				}
+				return tkn.SignedString(key)
+			}
+		}
+		return "", fmt.Errorf("No RSA256 signing key found")
+
 	default:
 		return "", fmt.Errorf("Signing method %v not supported", sig)
 	}
+}
+
+func parseRSA256SigningKey(str string) (*rsa.PrivateKey, error) {
+	keyBytes, err := base64.StdEncoding.DecodeString(str)
+	if err != nil {
+		return nil, err
+	}
+
+	keyPem, _ := pem.Decode(keyBytes)
+	if keyPem == nil {
+		return nil, fmt.Errorf("Failed to get secret")
+	}
+	if keyPem.Type != "RSA PRIVATE KEY" {
+		return nil, fmt.Errorf("Decoded key is of the wrong type (%v)", keyPem.Type)
+	}
+
+	var parsedKey interface{}
+	if parsedKey, err = x509.ParsePKCS1PrivateKey(keyPem.Bytes); err != nil {
+		if parsedKey, err = x509.ParsePKCS8PrivateKey(keyPem.Bytes); err != nil {
+			return nil, err
+		}
+	}
+	privKey, ok := parsedKey.(*rsa.PrivateKey)
+	if !ok {
+		return nil, fmt.Errorf("Failed to parse private key")
+	}
+
+	return privKey, nil
 }
