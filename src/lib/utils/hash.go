@@ -4,7 +4,7 @@ import (
 	"crypto/sha256"
 	"log"
 
-	"github.com/helixauth/helix/src/lib/mapper"
+	"github.com/helixauth/core/src/lib/mapper"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"

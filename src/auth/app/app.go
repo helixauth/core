@@ -3,10 +3,10 @@ package app
 import (
 	"context"
 
-	"github.com/helixauth/helix/cfg"
-	"github.com/helixauth/helix/src/lib/database"
-	"github.com/helixauth/helix/src/lib/email"
-	"github.com/helixauth/helix/src/lib/secrets"
+	"github.com/helixauth/core/cfg"
+	"github.com/helixauth/core/src/lib/database"
+	"github.com/helixauth/core/src/lib/email"
+	"github.com/helixauth/core/src/lib/secrets"
 
 	"github.com/gin-gonic/gin"
 )

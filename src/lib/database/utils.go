@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/helixauth/helix/cfg"
+	"github.com/helixauth/core/cfg"
 )
 
 // connect opens a new database connection with tenant isolation

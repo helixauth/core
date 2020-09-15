@@ -1,4 +1,4 @@
-module github.com/helixauth/helix
+module github.com/helixauth/core
 
 go 1.14
 

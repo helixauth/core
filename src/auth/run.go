@@ -5,10 +5,10 @@ import (
 	"html/template"
 	"os"
 
-	"github.com/helixauth/helix/src/auth/app"
-	"github.com/helixauth/helix/src/lib/database"
-	"github.com/helixauth/helix/src/lib/email"
-	"github.com/helixauth/helix/src/lib/secrets"
+	"github.com/helixauth/core/src/auth/app"
+	"github.com/helixauth/core/src/lib/database"
+	"github.com/helixauth/core/src/lib/email"
+	"github.com/helixauth/core/src/lib/secrets"
 
 	"github.com/gin-gonic/gin"
 )

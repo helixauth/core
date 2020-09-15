@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/helixauth/helix/src/entity"
-	"github.com/helixauth/helix/src/lib/mapper"
+	"github.com/helixauth/core/src/entity"
+	"github.com/helixauth/core/src/lib/mapper"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"

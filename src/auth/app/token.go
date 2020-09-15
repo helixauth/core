@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/helixauth/helix/src/auth/app/oauth"
-	"github.com/helixauth/helix/src/lib/token"
+	"github.com/helixauth/core/src/auth/app/oauth"
+	"github.com/helixauth/core/src/lib/token"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"

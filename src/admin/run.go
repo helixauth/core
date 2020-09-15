@@ -4,8 +4,8 @@ import (
 	"context"
 	"os"
 
-	"github.com/helixauth/helix/src/admin/app"
-	"github.com/helixauth/helix/src/lib/database"
+	"github.com/helixauth/core/src/admin/app"
+	"github.com/helixauth/core/src/lib/database"
 
 	"github.com/gin-gonic/gin"
 )

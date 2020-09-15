@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/helixauth/helix/cfg"
+	"github.com/helixauth/core/cfg"
 )
 
 // BeginTxn begins a new database transaction

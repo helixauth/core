@@ -7,12 +7,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/helixauth/helix/src/auth/app/oauth"
-	"github.com/helixauth/helix/src/entity"
-	"github.com/helixauth/helix/src/lib/database"
-	"github.com/helixauth/helix/src/lib/mapper"
-	"github.com/helixauth/helix/src/lib/token"
-	"github.com/helixauth/helix/src/lib/utils"
+	"github.com/helixauth/core/src/auth/app/oauth"
+	"github.com/helixauth/core/src/entity"
+	"github.com/helixauth/core/src/lib/database"
+	"github.com/helixauth/core/src/lib/mapper"
+	"github.com/helixauth/core/src/lib/token"
+	"github.com/helixauth/core/src/lib/utils"
 
 	"github.com/dchest/uniuri"
 	"github.com/dgrijalva/jwt-go"

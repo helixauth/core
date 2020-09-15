@@ -8,7 +8,7 @@ import (
 	"encoding/pem"
 	"fmt"
 
-	"github.com/helixauth/helix/src/lib/secrets"
+	"github.com/helixauth/core/src/lib/secrets"
 
 	"github.com/dgrijalva/jwt-go"
 )

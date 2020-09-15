@@ -3,8 +3,8 @@ package email
 import (
 	"context"
 
-	"github.com/helixauth/helix/src/entity"
-	"github.com/helixauth/helix/src/lib/mapper"
+	"github.com/helixauth/core/src/entity"
+	"github.com/helixauth/core/src/lib/mapper"
 )
 
 const (

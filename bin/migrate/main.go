@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/helixauth/helix/cfg"
+	"github.com/helixauth/core/cfg"
 
 	migrate "github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
